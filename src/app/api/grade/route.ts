@@ -1,63 +1,99 @@
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
+import { getCurrentUser } from "@/lib/auth";
+import { getDb } from "@/lib/db";
+
+const SYSTEM_PROMPT = `You are an expert trivia judge. You will be given a list of questions, the correct answers, and a user's answers.
+Determine if each user answer is correct or close enough (ignore typos, minor spelling errors, missing 'the/a', or missing first names if the last name is highly distinguishing).
+
+You MUST respond with valid JSON. Output ONLY a JSON object — no markdown, no backticks, no extra text.
+
+Format:
+{
+  "results": [
+    {"isCorrect": true/false, "feedback": "Short encouraging feedback. If wrong, explain the correct answer."},
+    ...one per question
+  ]
+}`;
+
+function parseResults(raw: string | null): { isCorrect: boolean; feedback: string }[] {
+  if (!raw) return [];
+  const cleaned = raw.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "").trim();
+  try {
+    const parsed = JSON.parse(cleaned);
+    return parsed.results || [];
+  } catch {
+    return [];
+  }
+}
 
 export async function POST(req: NextRequest) {
   try {
-    const { apiKey, userAnswers, questions } = await req.json();
+    const { apiKey, baseURL, model, userAnswers, questions, gameId } = await req.json();
 
     if (!apiKey) {
-      return NextResponse.json(
-        { error: "API key is required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "API key is required" }, { status: 400 });
     }
-
     if (!userAnswers || !questions) {
-      return NextResponse.json(
-        { error: "Missing required data" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Missing required data" }, { status: 400 });
     }
 
-    const openai = new OpenAI({ apiKey });
-
-    // We send all 5 questions to be graded in one shot to save time
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [
-        {
-          role: "system",
-          content: `You are an expert trivia judge. You will be given a list of questions, the correct answers, and a user's answers.
-          You need to determine if the user's answer is correct or close enough to be considered correct (ignoring typos, minor spelling errors, missing 'the/a', or missing first names if the last name is highly distinguishing).
-          
-          Respond strictly in this JSON format:
-          {
-            "results": [
-              {
-                "isCorrect": boolean,
-                "feedback": "Short, encouraging feedback explaining the right answer if they got it wrong."
-              }
-            ]
-          }`
-        },
-        {
-          role: "user",
-          content: JSON.stringify({
-            itemsToGrade: questions.map((q: { question: string, answer: string }, i: number) => ({
-              question: q.question,
-              officialAnswer: q.answer,
-              userAnswer: userAnswers[i] || ""
-            }))
-          })
-        }
-      ],
-      response_format: { type: "json_object" }
+    const openai = new OpenAI({
+      apiKey,
+      ...(baseURL && { baseURL }),
     });
 
-    const content = completion.choices[0].message.content;
-    const parsed = JSON.parse(content || "{}");
+    const selectedModel = model || "gpt-4o-mini";
 
-    return NextResponse.json({ results: parsed.results || [] });
+    const userMessage = JSON.stringify({
+      itemsToGrade: questions.map((q: { question: string; answer: string }, i: number) => ({
+        question: q.question,
+        officialAnswer: q.answer,
+        userAnswer: userAnswers[i] || "",
+      })),
+    });
+
+    let content: string | null;
+    try {
+      const completion = await openai.chat.completions.create({
+        model: selectedModel,
+        messages: [
+          { role: "system", content: SYSTEM_PROMPT },
+          { role: "user", content: userMessage },
+        ],
+        response_format: { type: "json_object" },
+      });
+      content = completion.choices[0].message.content;
+    } catch {
+      const completion = await openai.chat.completions.create({
+        model: selectedModel,
+        messages: [
+          { role: "system", content: SYSTEM_PROMPT },
+          { role: "user", content: userMessage },
+        ],
+      });
+      content = completion.choices[0].message.content;
+    }
+
+    const results = parseResults(content);
+
+    if (!results || results.length === 0) {
+      return NextResponse.json(
+        { error: "Model returned invalid grading results. Try a different model or provider." },
+        { status: 500 }
+      );
+    }
+
+    // Update game in DB if logged in
+    const score = results.filter((r) => r.isCorrect).length;
+    const user = await getCurrentUser();
+    if (user && gameId) {
+      const db = getDb();
+      db.prepare("UPDATE games SET answers = ?, results = ?, score = ? WHERE id = ? AND user_id = ?")
+        .run(JSON.stringify(userAnswers), JSON.stringify(results), score, gameId, user.id);
+    }
+
+    return NextResponse.json({ results, score });
   } catch (error: unknown) {
     console.error("Grade error:", error);
     return NextResponse.json(
