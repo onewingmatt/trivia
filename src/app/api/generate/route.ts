@@ -3,69 +3,44 @@ import OpenAI from "openai";
 import { getCurrentUser } from "@/lib/auth";
 import { getDb } from "@/lib/db";
 
-const SYSTEM_PROMPT = `You are a veteran Jeopardy! clue writer with decades of experience on the show's writing staff. You follow the same craft principles used in the actual Jeopardy! writers room.
+const BASE_PROMPT = `You are a veteran Jeopardy! clue writer with decades of experience on the show's writing staff. You follow the same craft principles used in the actual Jeopardy! writers room.
 
 CORE PHILOSOPHY — a good clue must get one of three reactions: "I knew that," "Darn, I should have known that," or "I didn't know that, but now I'm glad I do." The goal is NEVER to stump — it's to give the solver a satisfying "aha" moment.
 
-BOARD COMPOSITION (from the real Jeopardy! color-coded system):
-The writers room uses a color-coded balance system. A single board of 6 categories uses roughly this mix:
-- ACADEMIC (blue): ~28% — Science, History, Literature, Geography, Art
-- POP CULTURE (pink): ~17% — Film, TV, Music, Sports, Gaming, Celebrities, Internet culture
-- LIFESTYLE (green): ~18% — Food & Drink, Fashion, Travel, Business, Cars, Health, Religion
-- WORD PLAY (yellow): ~15% — Rhymes, anagrams, letter patterns, double meanings, puns, "before & after"
-- INTERDISCIPLINARY: ~22% — Categories where all answers share a thread but span different domains (e.g., "ANGELS" could include Angel Falls, Touched by an Angel, LA Angels, Angela Merkel)
+BOARD COMPOSITION:
+- ACADEMIC: Science, History, Literature, Geography, Art
+- POP CULTURE: Film, TV, Music, Sports, Gaming, Celebrities
+- LIFESTYLE: Food & Drink, Fashion, Travel, Business, Cars, Health, Religion
+- WORD PLAY: Rhymes, anagrams, letter patterns, double meanings, puns
+- INTERDISCIPLINARY: Categories where all answers share a thread but span different domains
 
-For your 5 categories, you MUST cover at least 4 of these 5 types. No more than 2 categories from any single type. Do NOT default to all-academic.
+CATEGORY NAMING: Specific and creative with wordplay where possible. Not "HISTORY" but "HISTORICAL HEAVYWEIGHTS".
 
-CATEGORY NAMING:
-- Specific and creative, not generic. Not "HISTORY" but "HISTORICAL HEAVYWEIGHTS", not "FOOD" but "CHEF'S KISS", not "MUSIC" but "CHART TOPPERS".
-- Wordplay categories get punny titles: "LETTER RIP", "RHYME TIME", "BEFORE & AFTER".
-- Interdisciplinary categories get a clever unifying title that hints at the thread.
-
-STRUCTURAL RULES FOR CLUES:
-
-1. PINNING. Every clue must have exactly ONE correct answer. If your clue could describe multiple things, it's not pinned — rewrite it tighter. Add a specific detail that locks it to one answer only.
-
-2. LENGTH & DENSITY. Clues must be 30-50 WORDS. Real Jeopardy clues take a full breath to read aloud. This isn't negotiable — short clues are rejected in the writers room. Use the space to build atmosphere and weave in information.
-
-3. THREE-FACT LAYERING. Every clue must contain at least THREE distinct facts or context clues, arranged in a specific order:
-   - OPENER: A broad, engaging detail that could apply to several answers (creates initial uncertainty)
-   - MIDDLE: A second fact that starts narrowing the field (the solver begins to form a hypothesis)
-   - CLOSER: The key detail that pins the answer — placed near the END so the solver has to read the whole clue before the answer crystallizes
-
-4. TWO-STEP REASONING. The best clues require connecting two pieces of information, not just recalling a single fact. The solver should feel clever for making the connection.
-
-5. MISDIRECTION IS WELCOME. A clue that initially seems to point one direction before pivoting is ideal. Use words with double meanings, or set up an expectation in the opener that the closer subverts.
-
-6. VOICE & TONE. Wry, confident, never robotic. Write like someone who genuinely finds the subject interesting — not like an encyclopedia. A subtle wink to the reader. But NEVER at the expense of clarity.
-
-7. NEVER reveal words from the answer in the clue itself. Check for this before finalizing every clue.
-
-8. DIFFICULTY: Mix of 2 medium and 3 harder clues. The easiest should be gettable by most educated people. The hardest should reward deeper knowledge but still be answerable from the clues provided. As head writer Billy Wisse says: "A too-easy clue can be made more difficult by simply removing a word. A too-difficult clue can be made easier by adding a word."
+STRUCTURAL RULES:
+1. PINNING. Exactly ONE correct answer.
+2. LENGTH & DENSITY. 30-50 WORDS minimum. Real Jeopardy clues take a full breath to read aloud.
+3. THREE-FACT LAYERING. Opener (broad), Middle (narrowing), Closer (pinning detail near the END).
+4. TWO-STEP REASONING. Require connecting two pieces of information, not just recalling one fact.
+5. MISDIRECTION. Set up an expectation in the opener that the closer subverts.
+6. VOICE & TONE. Wry, confident, never robotic. A subtle wink to the reader.
+7. NEVER reveal words from the answer in the clue itself.
 
 EXAMPLES:
+BAD (too short, single fact): "This physicist developed the theory of relativity."
+GOOD (three facts, two-step reasoning, 40+ words, pinned): "In 1905, while working as a third-class examiner at the Swiss patent office in Bern, this future Nobel laureate published four groundbreaking papers in a single year — though the prize he eventually won was for the photoelectric effect, not the equation E=mc² for which he is best known today."
+`;
 
-BAD (too short, single fact, no pinning):
-"This physicist developed the theory of relativity."
+function getSystemPrompt(count: number, avoidCats: string[] = []) {
+  const avoidText = avoidCats.length > 0 
+    ? `\nCRITICAL: DO NOT use these categories as they are already in the game: ${avoidCats.join(", ")}.` 
+    : "";
+  return `${BASE_PROMPT}\nGenerate exactly ${count} clues from ${count} completely different categories.${avoidText}\n\nYou MUST respond with valid JSON. Output ONLY a JSON object with a "questions" array. No markdown, no backticks, no extra text.\nFormat:\n{\n  "questions": [\n    {"category": "CREATIVE CATEGORY NAME IN CAPS", "question": "The clue text", "answer": "Just the answer entity"},\n    ...\n  ]\n}`;
+}
 
-BAD (two facts but still too brief, no journey):
-"Born in 1879, this physicist developed the theory of relativity and won a Nobel Prize."
-
-GOOD (three facts, two-step reasoning, 40+ words, pinned):
-"In 1905, while working as a third-class examiner at the Swiss patent office in Bern, this future Nobel laureate published four groundbreaking papers in a single year — though the prize he eventually won was for the photoelectric effect, not the equation E=mc² for which he is best known today."
-(Three facts: patent office/Bern, four papers in 1905, photoelectric effect vs E=mc². Two-step: identify the scientist from the year/context AND from the specific Nobel detail.)
-
-Generate exactly 5 clues from 5 completely different categories covering at least 4 of the 5 category types listed above.
-
-You MUST respond with valid JSON. Output ONLY a JSON object with a "questions" array. No markdown, no backticks, no extra text.
-
-Format:
-{
-  "questions": [
-    {"category": "CREATIVE CATEGORY NAME IN CAPS", "question": "The clue text", "answer": "Just the answer entity — no 'What is' prefix"},
-    ...5 total
-  ]
-}`;
+function getFallbackPrompt(count: number, avoidCats: string[] = []) {
+  const avoidText = avoidCats.length > 0 ? `\nDO NOT use these categories: ${avoidCats.join(", ")}.` : "";
+  return `You are a veteran Jeopardy! clue writer. Write exactly ${count} clues from different categories.${avoidText}\n\nCRITICAL RULES:\n- Each clue must be 30-50 words.\n- Each clue must contain at least 3 distinct facts layered progressively.\n- Clues must be PINNED: only one possible correct answer.\n- Write as statements. Wry, confident tone.\n- Never use words from the answer in the clue.\n\nOutput ONLY valid JSON, no markdown:\n{"questions":[{"category":"CREATIVE CATEGORY IN CAPS","question":"The clue","answer":"The answer entity"}]}`;
+}
 
 function parseQuestions(raw: string | null): unknown[] {
   if (!raw) return [];
@@ -81,97 +56,169 @@ function parseQuestions(raw: string | null): unknown[] {
   }
 }
 
+async function getSmartQuestions(userId: number, maxInject: number) {
+  const db = getDb();
+  const recentGames = db.prepare(`SELECT questions FROM games WHERE user_id = ? ORDER BY created_at DESC LIMIT 5`).all(userId) as { questions: string }[];
+  const seenQuestions = new Set<string>();
+  const avoidCategories = new Set<string>();
+  
+  for (const game of recentGames) {
+    try {
+      const qs: any[] = JSON.parse(game.questions);
+      for (const q of qs) {
+        seenQuestions.add(q.question.trim().toLowerCase());
+        avoidCategories.add(q.category.trim().toUpperCase());
+      }
+    } catch {}
+  }
+
+  const likedFeedback = db.prepare(`
+    SELECT gf.game_id, gf.question_index
+    FROM question_feedback gf
+    WHERE gf.user_id = ? AND gf.rating = 'like'
+    ORDER BY RANDOM()
+    LIMIT 20
+  `).all(userId) as { game_id: number; question_index: number }[];
+
+  const injected: any[] = [];
+  for (const fb of likedFeedback) {
+    if (injected.length >= maxInject) break;
+    const game = db.prepare("SELECT questions FROM games WHERE id = ?").get(fb.game_id) as { questions: string } | undefined;
+    if (!game) continue;
+    try {
+      const qs: any[] = JSON.parse(game.questions);
+      const q = qs[fb.question_index];
+      const qText = q.question.trim().toLowerCase();
+      const catText = q.category.trim().toUpperCase();
+      
+      if (q && !seenQuestions.has(qText) && !avoidCategories.has(catText)) {
+        injected.push(q);
+        seenQuestions.add(qText);
+        avoidCategories.add(catText);
+      }
+    } catch {}
+  }
+  return { questions: injected, avoidCategories: Array.from(avoidCategories) };
+}
+const FALLBACK_BANK = [
+  { category: "HISTORICAL HEAVYWEIGHTS", question: "In 1905, while working as a third-class examiner at the Swiss patent office in Bern, this future Nobel laureate published four groundbreaking papers in a single year, though the prize he eventually won was for the photoelectric effect, not the equation for which he is best known today.", answer: "Albert Einstein" },
+  { category: "LITERARY FIRSTS", question: "Published in 1851, this novel by Herman Melville was initially a commercial failure and a critical disappointment, only to be rediscovered and hailed as a masterpiece of American literature a century later.", answer: "Moby-Dick" },
+  { category: "CULINARY CURIOSITIES", question: "Originally created in the 1920s by an Italian-American chef in New York who wanted to recreate a dish his grandmother made, this pasta features a creamy sauce made from egg yolks, hard cheese, cured pork, and black pepper.", answer: "Spaghetti alla Carbonara" },
+  { category: "CELESTIAL BODIES", question: "Discovered in 1930 by Clyde Tombaugh, this dwarf planet was reclassified by the International Astronomical Union in 2006, sparking a debate that continues to this day among planetary scientists.", answer: "Pluto" },
+  { category: "WORD PLAY", question: "Remove the first letter of this word meaning 'to flow swiftly', and you are left with a word meaning a small, narrow body of water.", answer: "Stream" },
+  { category: "MUSICAL MASTERS", question: "Despite being completely deaf by the last decade of his life, this German composer continued to write music, including his monumental Ninth Symphony, which famously features a choral finale.", answer: "Ludwig van Beethoven" },
+  { category: "GEOGRAPHICAL ODDITIES", question: "This landlocked country in South America is unique for having two capital cities: Sucre, which is the constitutional capital, and La Paz, which is the seat of government.", answer: "Bolivia" },
+  { category: "TECHNOLOGY TITANS", question: "Founded in a garage in 1976, this company's first product was the Apple I, a computer kit that was assembled by hand and sold for $666.66.", answer: "Apple" },
+  { category: "CINEMATIC MILESTONES", question: "Released in 1977, this science fiction film revolutionized the use of special effects in cinema and spawned a vast multimedia franchise that includes sequels, prequels, TV series, and theme parks.", answer: "Star Wars" },
+  { category: "NATURAL WONDERS", question: "Located on the border of Zambia and Zimbabwe, this massive waterfall is known by the indigenous name 'Mosi-oa-Tunya', which translates to 'The Smoke That Thunders'.", answer: "Victoria Falls" }
+];
+
 export async function POST(req: NextRequest) {
   try {
     const { apiKey, baseURL, model } = await req.json();
-
-    if (!apiKey) {
-      return NextResponse.json({ error: "API key is required" }, { status: 400 });
-    }
-
-    const openai = new OpenAI({
-      apiKey,
-      ...(baseURL && { baseURL }),
-    });
-
+    const user = await getCurrentUser();
     const selectedModel = model || "gpt-4o-mini";
+    
+    // If no API key, serve from the local bank
+    if (!apiKey) {
+      let bankQuestions: any[] = [];
+      
+      if (user) {
+        const smartData = await getSmartQuestions(user.id, 5);
+        bankQuestions = smartData.questions;
+      }
+      
+      // Fill remaining slots from the fallback bank
+      const remaining = 5 - bankQuestions.length;
+      if (remaining > 0) {
+        const shuffledFallback = [...FALLBACK_BANK].sort(() => 0.5 - Math.random());
+        // Filter out any categories we already have to maintain diversity
+        const existingCats = new Set(bankQuestions.map(q => q.category.toUpperCase()));
+        const newQuestions = shuffledFallback.filter(q => !existingCats.has(q.category.toUpperCase())).slice(0, remaining);
+        bankQuestions = [...bankQuestions, ...newQuestions];
+      }
 
-    let content: string | null;
-    try {
-      const completion = await openai.chat.completions.create({
-        model: selectedModel,
-        messages: [{ role: "system", content: SYSTEM_PROMPT }],
-        response_format: { type: "json_object" },
-      });
-      content = completion.choices[0].message.content;
-    } catch {
-      const completion = await openai.chat.completions.create({
-        model: selectedModel,
-        messages: [{ role: "system", content: SYSTEM_PROMPT }],
-      });
-      content = completion.choices[0].message.content;
+      // Ensure we have exactly 5, shuffle them
+      const finalQuestions = bankQuestions.slice(0, 5).sort(() => 0.5 - Math.random());
+
+      let gameId: number | null = null;
+      if (user) {
+        const db = getDb();
+        const result = db
+          .prepare("INSERT INTO games (user_id, provider, model, questions, answers) VALUES (?, ?, ?, ?, ?)")
+          .run(user.id, "offline-bank", "local", JSON.stringify(finalQuestions), JSON.stringify(Array(5).fill("")));
+        gameId = Number(result.lastInsertRowid);
+      }
+
+      return NextResponse.json({ questions: finalQuestions, gameId });
     }
 
-    let questions = parseQuestions(content);
-
-    if (!questions || questions.length !== 5) {
-      const fb = await openai.chat.completions.create({
-        model: selectedModel,
-        messages: [
-          {
-            role: "system",
-            content: `You are a veteran Jeopardy! clue writer. Write exactly 5 clues from different categories.
-
-CATEGORY BALANCE (use at least 4 of these 5 types):
-- ACADEMIC: Science, History, Literature, Geography, Art
-- POP CULTURE: Film, TV, Music, Sports, Gaming, Celebrities
-- LIFESTYLE: Food & Drink, Fashion, Travel, Business, Health
-- WORD PLAY: Rhymes, anagrams, puns, "before & after"
-- INTERDISCIPLINARY: Unifying thread across different domains
-
-No more than 2 from any single type. Creative category names with wordplay.
-
-CRITICAL RULES:
-- Each clue must be 30-50 words — no exceptions.
-- Each clue must contain at least 3 distinct facts layered progressively (broad opener, narrowing middle, pinning closer).
-- Clues must be PINNED: only one possible correct answer.
-- Require two-step reasoning — connecting two pieces of info, not just recalling one fact.
-- Write as statements ("This...", "He..."). Wry, confident tone.
-- Never use words from the answer in the clue.
-
-Output ONLY valid JSON, no markdown, no explanation:
-{"questions":[{"category":"CREATIVE CATEGORY IN CAPS","question":"The clue","answer":"The answer entity"}]}`,
-          },
-        ],
-      });
-      questions = parseQuestions(fb.choices[0].message.content);
+    // --- API KEY PROVIDED: Use LLM ---
+    let smartData = { questions: [] as any[], avoidCategories: [] as string[] };
+    if (user) {
+      smartData = await getSmartQuestions(user.id, 1); // Inject max 1 liked, unseen question
     }
 
-    if (!questions || questions.length !== 5) {
+    const remainingCount = 5 - smartData.questions.length;
+    let generatedQuestions: any[] = [];
+
+    if (remainingCount > 0) {
+      const openai = new OpenAI({
+        apiKey,
+        ...(baseURL && { baseURL }),
+      });
+
+      let content: string | null;
+      try {
+        const completion = await openai.chat.completions.create({
+          model: selectedModel,
+          messages: [{ role: "system", content: getSystemPrompt(remainingCount, smartData.avoidCategories) }],
+          response_format: { type: "json_object" },
+        });
+        content = completion.choices[0].message.content;
+      } catch {
+        const completion = await openai.chat.completions.create({
+          model: selectedModel,
+          messages: [{ role: "system", content: getSystemPrompt(remainingCount, smartData.avoidCategories) }],
+        });
+        content = completion.choices[0].message.content;
+      }
+
+      generatedQuestions = parseQuestions(content);
+
+      if (!generatedQuestions || generatedQuestions.length !== remainingCount) {
+        const fb = await openai.chat.completions.create({
+          model: selectedModel,
+          messages: [{ role: "system", content: getFallbackPrompt(remainingCount, smartData.avoidCategories) }],
+        });
+        generatedQuestions = parseQuestions(fb.choices[0].message.content);
+      }
+    }
+
+    const allQuestions = [...smartData.questions, ...generatedQuestions];
+    
+    for (let i = allQuestions.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [allQuestions[i], allQuestions[j]] = [allQuestions[j], allQuestions[i]];
+    }
+
+    if (!allQuestions || allQuestions.length !== 5) {
       return NextResponse.json(
         { error: "Model returned invalid or incomplete questions. Try a different model or provider." },
         { status: 500 }
       );
     }
 
-    // Save game to DB if logged in
     let gameId: number | null = null;
-    const user = await getCurrentUser();
     if (user) {
       const db = getDb();
       const result = db
         .prepare("INSERT INTO games (user_id, provider, model, questions, answers) VALUES (?, ?, ?, ?, ?)")
-        .run(
-          user.id,
-          baseURL || "openai",
-          selectedModel,
-          JSON.stringify(questions),
-          JSON.stringify(Array(5).fill(""))
-        );
+        .run(user.id, baseURL || "openai", selectedModel, JSON.stringify(allQuestions), JSON.stringify(Array(5).fill("")));
       gameId = Number(result.lastInsertRowid);
     }
 
-    return NextResponse.json({ questions, gameId });
+    return NextResponse.json({ questions: allQuestions, gameId });
   } catch (error: unknown) {
     console.error("Generate error:", error);
     return NextResponse.json(

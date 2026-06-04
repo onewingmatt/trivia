@@ -27,61 +27,82 @@ function parseResults(raw: string | null): { isCorrect: boolean; feedback: strin
   }
 }
 
+function normalizeString(s: string): string {
+  return s.toLowerCase().replace(/[^\w\s]/g, "").trim();
+}
+
 export async function POST(req: NextRequest) {
   try {
     const { apiKey, baseURL, model, userAnswers, questions, gameId } = await req.json();
 
-    if (!apiKey) {
-      return NextResponse.json({ error: "API key is required" }, { status: 400 });
-    }
     if (!userAnswers || !questions) {
       return NextResponse.json({ error: "Missing required data" }, { status: 400 });
     }
 
-    const openai = new OpenAI({
-      apiKey,
-      ...(baseURL && { baseURL }),
-    });
+    let results: { isCorrect: boolean; feedback: string }[] = [];
 
-    const selectedModel = model || "gpt-4o-mini";
-
-    const userMessage = JSON.stringify({
-      itemsToGrade: questions.map((q: { question: string; answer: string }, i: number) => ({
-        question: q.question,
-        officialAnswer: q.answer,
-        userAnswer: userAnswers[i] || "",
-      })),
-    });
-
-    let content: string | null;
-    try {
-      const completion = await openai.chat.completions.create({
-        model: selectedModel,
-        messages: [
-          { role: "system", content: SYSTEM_PROMPT },
-          { role: "user", content: userMessage },
-        ],
-        response_format: { type: "json_object" },
+    // OFFLINE MODE: Exact match grading
+    if (!apiKey) {
+      results = questions.map((q: { question: string; answer: string }, i: number) => {
+        const userAns = normalizeString(userAnswers[i] || "");
+        const officialAns = normalizeString(q.answer);
+        // Exact match after normalization (case-insensitive, punctuation removed)
+        const isCorrect = userAns === officialAns || (officialAns.includes(userAns) && userAns.length > 3);
+        
+        return {
+          isCorrect,
+          feedback: isCorrect 
+            ? "Correct!" 
+            : `Incorrect. The exact official answer is: ${q.answer}`,
+        };
       });
-      content = completion.choices[0].message.content;
-    } catch {
-      const completion = await openai.chat.completions.create({
-        model: selectedModel,
-        messages: [
-          { role: "system", content: SYSTEM_PROMPT },
-          { role: "user", content: userMessage },
-        ],
+    } else {
+      // LLM GRADING MODE
+      const openai = new OpenAI({
+        apiKey,
+        ...(baseURL && { baseURL }),
       });
-      content = completion.choices[0].message.content;
-    }
 
-    const results = parseResults(content);
+      const selectedModel = model || "gpt-4o-mini";
 
-    if (!results || results.length === 0) {
-      return NextResponse.json(
-        { error: "Model returned invalid grading results. Try a different model or provider." },
-        { status: 500 }
-      );
+      const userMessage = JSON.stringify({
+        itemsToGrade: questions.map((q: { question: string; answer: string }, i: number) => ({
+          question: q.question,
+          officialAnswer: q.answer,
+          userAnswer: userAnswers[i] || "",
+        })),
+      });
+
+      let content: string | null;
+      try {
+        const completion = await openai.chat.completions.create({
+          model: selectedModel,
+          messages: [
+            { role: "system", content: SYSTEM_PROMPT },
+            { role: "user", content: userMessage },
+          ],
+          response_format: { type: "json_object" },
+        });
+        content = completion.choices[0].message.content;
+      } catch {
+        const completion = await openai.chat.completions.create({
+          model: selectedModel,
+          messages: [
+            { role: "system", content: SYSTEM_PROMPT },
+            { role: "user", content: userMessage },
+          ],
+        });
+        content = completion.choices[0].message.content;
+      }
+
+      results = parseResults(content);
+
+      if (!results || results.length === 0) {
+        return NextResponse.json(
+          { error: "Model returned invalid grading results. Try a different model or provider." },
+          { status: 500 }
+        );
+      }
     }
 
     // Update game in DB if logged in

@@ -78,11 +78,7 @@ export default function Home() {
   const startGame = async () => {
     const config = getApiConfig();
     const apiKey = config.apiKey || localStorage.getItem("openaiApiKey");
-    if (!apiKey) {
-      setError("Please configure your API settings first (top right).");
-      return;
-    }
-
+    
     setIsLoading(true);
     setError(null);
     setResults(null);
@@ -96,7 +92,7 @@ export default function Home() {
       const res = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ apiKey, baseURL: config.baseURL, model: config.model }),
+        body: JSON.stringify({ apiKey: apiKey || "", baseURL: config.baseURL, model: config.model }),
       });
 
       const data = await res.json();
@@ -105,6 +101,9 @@ export default function Home() {
       if (data.questions && data.questions.length > 0) {
         setQuestions(data.questions);
         setGameId(data.gameId || null);
+        if (!apiKey) {
+          setError("Playing in Offline Mode (using built-in question bank). Add an API key in Settings for AI-generated questions.");
+        }
       } else {
         throw new Error("Invalid response from API");
       }
@@ -118,7 +117,6 @@ export default function Home() {
   const gradeAnswers = async () => {
     const config = getApiConfig();
     const apiKey = config.apiKey || localStorage.getItem("openaiApiKey");
-    if (!apiKey) return;
 
     setIsGrading(true);
     setError(null);
@@ -128,7 +126,7 @@ export default function Home() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          apiKey,
+          apiKey: apiKey || "",
           baseURL: config.baseURL,
           model: config.model,
           userAnswers,
