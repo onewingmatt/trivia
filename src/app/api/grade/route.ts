@@ -28,6 +28,7 @@ function parseResults(raw: string | null): { isCorrect: boolean; feedback: strin
 }
 
 function normalizeString(s: string): string {
+  // Lowercase, remove all punctuation, trim whitespace
   return s.toLowerCase().replace(/[^\w\s]/g, "").trim();
 }
 
@@ -41,23 +42,24 @@ export async function POST(req: NextRequest) {
 
     let results: { isCorrect: boolean; feedback: string }[] = [];
 
-    // OFFLINE MODE: Exact match grading
+    // OFFLINE MODE: Strict exact-match grading (NO LLM)
     if (!apiKey) {
       results = questions.map((q: { question: string; answer: string }, i: number) => {
         const userAns = normalizeString(userAnswers[i] || "");
         const officialAns = normalizeString(q.answer);
-        // Exact match after normalization (case-insensitive, punctuation removed)
-        const isCorrect = userAns === officialAns || (officialAns.includes(userAns) && userAns.length > 3);
+        
+        // STRICT EXACT MATCH: Must match the official answer after normalization
+        const isCorrect = userAns === officialAns;
         
         return {
           isCorrect,
           feedback: isCorrect 
             ? "Correct!" 
-            : `Incorrect. The exact official answer is: ${q.answer}`,
+            : `Incorrect. The exact answer is: ${q.answer}`,
         };
       });
     } else {
-      // LLM GRADING MODE
+      // ONLINE MODE: LLM Fuzzy Grading (handles typos, "What is...", partial matches)
       const openai = new OpenAI({
         apiKey,
         ...(baseURL && { baseURL }),
