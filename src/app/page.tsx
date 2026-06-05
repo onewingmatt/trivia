@@ -332,71 +332,79 @@ export default function Home() {
                   </div>
                 )}
 
-                {/* Feedback buttons — only when graded and logged in */}
-                {results && gameId && user && (
+                {/* Feedback section — shows after grading */}
+                {results && (
                   <div className="mt-4 pt-3 border-t border-gray-100 dark:border-gray-700 space-y-2">
-                    {/* Quality */}
-                    <div className="flex items-center gap-3">
-                      <span className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wider">Quality</span>
-                      <div className="flex items-center gap-1">
-                        <button
-                          onClick={() => handleFeedback(i, "like")}
-                          className={`p-1.5 rounded-lg transition text-sm flex items-center gap-1 ${
-                            feedback[i] === "like"
-                              ? "bg-green-100 dark:bg-green-900/40 text-green-600 dark:text-green-400"
-                              : "text-gray-400 hover:text-green-500 hover:bg-gray-100 dark:hover:bg-gray-700"
-                          }`}
-                          title="Good clue"
-                        >
-                          <ThumbsUp size={14} />
-                        </button>
-                        <button
-                          onClick={() => handleFeedback(i, "dislike")}
-                          className={`p-1.5 rounded-lg transition text-sm flex items-center gap-1 ${
-                            feedback[i] === "dislike"
-                              ? "bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400"
-                              : "text-gray-400 hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700"
-                          }`}
-                          title="Bad clue"
-                        >
-                          <ThumbsDown size={14} />
-                        </button>
+                    {!user ? (
+                      <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-700/50 p-3 rounded-lg">
+                        <span>Log in to rate this question and save your game history.</span>
                       </div>
-                      <button
-                        onClick={() => setReportingIndex(i)}
-                        className="p-1.5 rounded-lg text-gray-400 hover:text-orange-500 hover:bg-gray-100 dark:hover:bg-gray-700 transition ml-auto"
-                        title="Report this question"
-                      >
-                        <Flag size={14} />
-                      </button>
-                    </div>
-                    {/* Difficulty */}
-                    <div className="flex items-center gap-3">
-                      <span className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wider">Difficulty</span>
-                      <div className="flex items-center gap-1">
-                        {(["too_easy", "just_right", "too_hard"] as const).map((level) => {
-                          const labels: Record<string, string> = { too_easy: "Too easy", just_right: "Just right", too_hard: "Too hard" };
-                          const activeColors: Record<string, string> = {
-                            too_easy: "bg-sky-100 dark:bg-sky-900/40 text-sky-600 dark:text-sky-400",
-                            just_right: "bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400",
-                            too_hard: "bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400",
-                          };
-                          return (
+                    ) : (
+                      <>
+                        {/* Quality */}
+                        <div className="flex items-center gap-3">
+                          <span className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wider">Quality</span>
+                          <div className="flex items-center gap-1">
                             <button
-                              key={level}
-                              onClick={() => handleDifficulty(i, level)}
-                              className={`px-2 py-1 rounded-md text-xs font-medium transition ${
-                                difficulty[i] === level
-                                  ? activeColors[level]
-                                  : "text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                              onClick={() => handleFeedback(i, "like")}
+                              className={`p-1.5 rounded-lg transition text-sm flex items-center gap-1 ${
+                                feedback[i] === "like"
+                                  ? "bg-green-100 dark:bg-green-900/40 text-green-600 dark:text-green-400"
+                                  : "text-gray-400 hover:text-green-500 hover:bg-gray-100 dark:hover:bg-gray-700"
                               }`}
+                              title="Good clue"
                             >
-                              {labels[level]}
+                              <ThumbsUp size={14} />
                             </button>
-                          );
-                        })}
-                      </div>
-                    </div>
+                            <button
+                              onClick={() => handleFeedback(i, "dislike")}
+                              className={`p-1.5 rounded-lg transition text-sm flex items-center gap-1 ${
+                                feedback[i] === "dislike"
+                                  ? "bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400"
+                                  : "text-gray-400 hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700"
+                              }`}
+                              title="Bad clue"
+                            >
+                              <ThumbsDown size={14} />
+                            </button>
+                          </div>
+                          <button
+                            onClick={() => setReportingIndex(i)}
+                            className="p-1.5 rounded-lg text-gray-400 hover:text-orange-500 hover:bg-gray-100 dark:hover:bg-gray-700 transition ml-auto"
+                            title="Report this question"
+                          >
+                            <Flag size={14} />
+                          </button>
+                        </div>
+                        {/* Difficulty */}
+                        <div className="flex items-center gap-3">
+                          <span className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wider">Difficulty</span>
+                          <div className="flex items-center gap-1">
+                            {(["too_easy", "just_right", "too_hard"] as const).map((level) => {
+                              const labels: Record<string, string> = { too_easy: "Too easy", just_right: "Just right", too_hard: "Too hard" };
+                              const activeColors: Record<string, string> = {
+                                too_easy: "bg-sky-100 dark:bg-sky-900/40 text-sky-600 dark:text-sky-400",
+                                just_right: "bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400",
+                                too_hard: "bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400",
+                              };
+                              return (
+                                <button
+                                  key={level}
+                                  onClick={() => handleDifficulty(i, level)}
+                                  className={`px-2 py-1 rounded-md text-xs font-medium transition ${
+                                    difficulty[i] === level
+                                      ? activeColors[level]
+                                      : "text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                  }`}
+                                >
+                                  {labels[level]}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </>
+                    )}
                   </div>
                 )}
               </div>
