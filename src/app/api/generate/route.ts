@@ -115,7 +115,8 @@ const FALLBACK_BANK = [
 
 export async function POST(req: NextRequest) {
   try {
-    const { apiKey, baseURL, model } = await req.json();
+    const { apiKey, baseURL, model, count = 5 } = await req.json();
+    const safeCount = Math.min(Math.max(Number(count), 1), 15); // Clamp between 1 and 15
     const user = await getCurrentUser();
     const selectedModel = model || "gpt-4o-mini";
     
@@ -124,29 +125,29 @@ export async function POST(req: NextRequest) {
       let bankQuestions: any[] = [];
       
       if (user) {
-        const smartData = await getSmartQuestions(user.id, 5);
+        const smartData = await getSmartQuestions(user.id, Math.floor(safeCount / 3));
         bankQuestions = smartData.questions;
       }
       
       // Fill remaining slots from the fallback bank
-      const remaining = 5 - bankQuestions.length;
+      const remaining = safeCount - bankQuestions.length;
       if (remaining > 0) {
         const shuffledFallback = [...FALLBACK_BANK].sort(() => 0.5 - Math.random());
         // Filter out any categories we already have to maintain diversity
-        const existingCats = new Set(bankQuestions.map(q => q.category.toUpperCase()));
-        const newQuestions = shuffledFallback.filter(q => !existingCats.has(q.category.toUpperCase())).slice(0, remaining);
+        const existingCats = new Set(bankQuestions.map((q: any) => q.category.toUpperCase()));
+        const newQuestions = shuffledFallback.filter((q: any) => !existingCats.has(q.category.toUpperCase())).slice(0, remaining);
         bankQuestions = [...bankQuestions, ...newQuestions];
       }
 
-      // Ensure we have exactly 5, shuffle them
-      const finalQuestions = bankQuestions.slice(0, 5).sort(() => 0.5 - Math.random());
+      // Ensure we have exactly safeCount, shuffle them
+      const finalQuestions = bankQuestions.slice(0, safeCount).sort(() => 0.5 - Math.random());
 
       let gameId: number | null = null;
       if (user) {
         const db = getDb();
         const result = db
-          .prepare("INSERT INTO games (user_id, provider, model, questions, answers) VALUES (?, ?, ?, ?, ?)")
-          .run(user.id, "offline-bank", "local", JSON.stringify(finalQuestions), JSON.stringify(Array(5).fill("")));
+          .prepare("INSERT INTO games (user_id, provider, model, total, questions, answers) VALUES (?, ?, ?, ?, ?, ?)")
+          .run(user.id, "offline-bank", "local", safeCount, JSON.stringify(finalQuestions), JSON.stringify(Array(safeCount).fill("")));
         gameId = Number(result.lastInsertRowid);
       }
 
@@ -156,10 +157,10 @@ export async function POST(req: NextRequest) {
     // --- API KEY PROVIDED: Use LLM ---
     let smartData = { questions: [] as any[], avoidCategories: [] as string[] };
     if (user) {
-      smartData = await getSmartQuestions(user.id, 1); // Inject max 1 liked, unseen question
+      smartData = await getSmartQuestions(user.id, Math.floor(safeCount / 3)); // Inject proportional to size
     }
 
-    const remainingCount = 5 - smartData.questions.length;
+    const remainingCount = safeCount - smartData.questions.length;
     let generatedQuestions: any[] = [];
 
     if (remainingCount > 0) {
@@ -202,7 +203,7 @@ export async function POST(req: NextRequest) {
       [allQuestions[i], allQuestions[j]] = [allQuestions[j], allQuestions[i]];
     }
 
-    if (!allQuestions || allQuestions.length !== 5) {
+    if (!allQuestions || allQuestions.length !== safeCount) {
       return NextResponse.json(
         { error: "Model returned invalid or incomplete questions. Try a different model or provider." },
         { status: 500 }
@@ -213,8 +214,8 @@ export async function POST(req: NextRequest) {
     if (user) {
       const db = getDb();
       const result = db
-        .prepare("INSERT INTO games (user_id, provider, model, questions, answers) VALUES (?, ?, ?, ?, ?)")
-        .run(user.id, baseURL || "openai", selectedModel, JSON.stringify(allQuestions), JSON.stringify(Array(5).fill("")));
+        .prepare("INSERT INTO games (user_id, provider, model, total, questions, answers) VALUES (?, ?, ?, ?, ?, ?)")
+        .run(user.id, baseURL || "openai", selectedModel, safeCount, JSON.stringify(allQuestions), JSON.stringify(Array(safeCount).fill("")));
       gameId = Number(result.lastInsertRowid);
     }
 

@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  allowedDevOrigins: ['bosgame', '100.117.75.6'],
 };
 
 export default nextConfig;

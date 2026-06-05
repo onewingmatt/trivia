@@ -38,6 +38,7 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [gameId, setGameId] = useState<number | null>(null);
 
+  const [questionCount, setQuestionCount] = useState(5);
   const [user, setUser] = useState<AuthUser | null>(null);
   const [authChecked, setAuthChecked] = useState(false);
   const [feedback, setFeedback] = useState<Record<number, "like" | "dislike">>({});
@@ -82,7 +83,7 @@ export default function Home() {
     setIsLoading(true);
     setError(null);
     setResults(null);
-    setUserAnswers(Array(5).fill(""));
+    setUserAnswers(Array(questionCount).fill(""));
     setGameId(null);
     setFeedback({});
     setDifficulty({});
@@ -92,7 +93,12 @@ export default function Home() {
       const res = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ apiKey: apiKey || "", baseURL: config.baseURL, model: config.model }),
+        body: JSON.stringify({ 
+          apiKey: apiKey || "", 
+          baseURL: config.baseURL, 
+          model: config.model,
+          count: questionCount 
+        }),
       });
 
       const data = await res.json();
@@ -102,7 +108,7 @@ export default function Home() {
         setQuestions(data.questions);
         setGameId(data.gameId || null);
         if (!apiKey) {
-          setError("Playing in Offline Mode (using built-in question bank). Add an API key in Settings for AI-generated questions.");
+          setError(`Playing in Offline Mode (${questionCount} questions). Add an API key in Settings for AI-generated questions.`);
         }
       } else {
         throw new Error("Invalid response from API");
@@ -264,7 +270,23 @@ export default function Home() {
         )}
 
         {questions.length === 0 && !isLoading ? (
-          <div className="flex justify-center">
+          <div className="flex flex-col items-center justify-center gap-4">
+            <div className="flex items-center gap-3 bg-white dark:bg-gray-800 p-2 rounded-full shadow-sm border border-gray-200 dark:border-gray-700">
+              <span className="text-sm font-medium text-gray-600 dark:text-gray-300 pl-3">Game Size:</span>
+              {[3, 5, 10].map((size) => (
+                <button
+                  key={size}
+                  onClick={() => setQuestionCount(size)}
+                  className={`px-4 py-1.5 rounded-full text-sm font-semibold transition ${
+                    questionCount === size
+                      ? "bg-blue-600 text-white shadow-sm"
+                      : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                  }`}
+                >
+                  {size} {size === 3 ? "(Quick)" : size === 5 ? "(Standard)" : "(Marathon)"}
+                </button>
+              ))}
+            </div>
             <button
               onClick={startGame}
               className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-full text-lg shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1"
