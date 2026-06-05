@@ -42,20 +42,20 @@ export async function POST(req: NextRequest) {
 
     let results: { isCorrect: boolean; feedback: string }[] = [];
 
-    // OFFLINE MODE: Strict exact-match grading (NO LLM)
+    // OFFLINE MODE: Smart local grading (NO LLM)
     if (!apiKey) {
       results = questions.map((q: { question: string; answer: string }, i: number) => {
         const userAns = normalizeString(userAnswers[i] || "");
         const officialAns = normalizeString(q.answer);
         
-        // STRICT EXACT MATCH: Must match the official answer after normalization
-        const isCorrect = userAns === officialAns;
+        // Smart fuzzy match: exact match OR official answer contains the user's core answer (min 3 chars)
+        const isCorrect = userAns === officialAns || (officialAns.includes(userAns) && userAns.length > 3);
         
         return {
           isCorrect,
           feedback: isCorrect 
             ? "Correct!" 
-            : `Incorrect. The exact answer is: ${q.answer}`,
+            : `Incorrect. The answer is: ${q.answer}`,
         };
       });
     } else {
