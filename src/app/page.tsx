@@ -73,6 +73,10 @@ export default function Home() {
           setUser(null);
         }
       })
+      .catch(() => {
+        // Ignore auth check failure — user can still play as guest
+        if (!savedUser) setUser(null);
+      })
       .finally(() => setAuthChecked(true));
   }, []);
 
