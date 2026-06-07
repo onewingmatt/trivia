@@ -9,6 +9,8 @@ interface Question {
   category: string;
   question: string;
   answer: string;
+  model?: string;
+  promptStyle?: string;
 }
 
 interface GradeResult {
@@ -21,7 +23,7 @@ interface AuthUser {
   username: string;
 }
 
-function getApiConfig(): { apiKey?: string; baseURL?: string; model?: string } {
+function getApiConfig(): { apiKey?: string; baseURL?: string; model?: string; allNew?: boolean; promptStyle?: string; offlineMode?: boolean } {
   try {
     const raw = localStorage.getItem("triviaApiConfig");
     if (raw) return JSON.parse(raw);
@@ -48,10 +50,28 @@ export default function Home() {
   const [showShare, setShowShare] = useState(false);
 
   useEffect(() => {
-    fetch("/api/auth/me")
+    const savedUser = localStorage.getItem("triviaUser");
+    const savedToken = localStorage.getItem("triviaToken");
+    
+    if (savedUser && savedToken) {
+      try {
+        setUser(JSON.parse(savedUser));
+      } catch {
+        localStorage.removeItem("triviaUser");
+        localStorage.removeItem("triviaToken");
+      }
+    }
+    
+    fetch("/api/auth/me", {
+      headers: savedToken ? { "Authorization": `Bearer ${savedToken}` } : {}
+    })
       .then((r) => r.json())
       .then((data) => {
-        if (data.user) setUser(data.user);
+        if (data.user) {
+          setUser(data.user);
+        } else if (!savedUser) {
+          setUser(null);
+        }
       })
       .finally(() => setAuthChecked(true));
   }, []);
@@ -59,8 +79,14 @@ export default function Home() {
   const handleAuth = (u: AuthUser) => setUser(u);
 
   const handleLogout = async () => {
-    await fetch("/api/auth/logout", { method: "POST" });
+    const savedToken = localStorage.getItem("triviaToken");
+    await fetch("/api/auth/logout", { 
+      method: "POST",
+      headers: savedToken ? { "Authorization": `Bearer ${savedToken}` } : {}
+    });
     setUser(null);
+    localStorage.removeItem("triviaUser");
+    localStorage.removeItem("triviaToken");
   };
 
   const handleLoadGame = (game: {
@@ -73,12 +99,15 @@ export default function Home() {
     setUserAnswers(game.answers);
     setResults(game.results);
     setGameId(null); // loaded game, not a new one
+    setFeedback({});
+    setDifficulty({});
     setError(null);
   };
 
   const startGame = async () => {
     const config = getApiConfig();
     const apiKey = config.apiKey || localStorage.getItem("openaiApiKey");
+    const offlineMode = Boolean(config.offlineMode);
     
     setIsLoading(true);
     setError(null);
@@ -97,7 +126,10 @@ export default function Home() {
           apiKey: apiKey || "", 
           baseURL: config.baseURL, 
           model: config.model,
-          count: questionCount 
+          count: questionCount,
+          allNew: config.allNew || false,
+          promptStyle: config.promptStyle || "full",
+          offlineMode: Boolean(config.offlineMode)
         }),
       });
 
@@ -107,8 +139,10 @@ export default function Home() {
       if (data.questions && data.questions.length > 0) {
         setQuestions(data.questions);
         setGameId(data.gameId || null);
-        if (!apiKey) {
+        if (!offlineMode && !apiKey) {
           setError(`Playing in Offline Mode (${questionCount} questions). Add an API key in Settings for AI-generated questions.`);
+        } else if (offlineMode && apiKey) {
+          setError(`Playing in Offline Mode (${questionCount} questions) — API key is configured but disabled. Turn off Offline Mode in Settings to use AI.`);
         }
       } else {
         throw new Error("Invalid response from API");
@@ -123,6 +157,7 @@ export default function Home() {
   const gradeAnswers = async () => {
     const config = getApiConfig();
     const apiKey = config.apiKey || localStorage.getItem("openaiApiKey");
+    const token = localStorage.getItem("triviaToken");
 
     setIsGrading(true);
     setError(null);
@@ -130,7 +165,10 @@ export default function Home() {
     try {
       const res = await fetch("/api/grade", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          ...(token ? { "Authorization": `Bearer ${token}` } : {})
+        },
         body: JSON.stringify({
           apiKey: apiKey || "",
           baseURL: config.baseURL,
@@ -138,6 +176,7 @@ export default function Home() {
           userAnswers,
           questions,
           gameId,
+          offlineMode: Boolean(config.offlineMode),
         }),
       });
 
@@ -160,19 +199,26 @@ export default function Home() {
 
   const handleFeedback = async (questionIndex: number, rating: "like" | "dislike") => {
     if (!gameId || !user) return;
+    const token = localStorage.getItem("triviaToken");
     const newRating = feedback[questionIndex] === rating ? undefined : rating;
     try {
       if (newRating) {
         await fetch("/api/feedback", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ gameId, questionIndex, rating: newRating }),
+          headers: { 
+            "Content-Type": "application/json",
+            ...(token ? { "Authorization": `Bearer ${token}` } : {})
+          },
+          body: JSON.stringify({ gameId, questionIndex, rating: newRating, questionModel: questions[questionIndex]?.model, questionPromptStyle: questions[questionIndex]?.promptStyle }),
         });
         setFeedback((prev) => ({ ...prev, [questionIndex]: newRating }));
       } else {
         await fetch("/api/feedback", {
           method: "DELETE",
-          headers: { "Content-Type": "application/json" },
+          headers: { 
+            "Content-Type": "application/json",
+            ...(token ? { "Authorization": `Bearer ${token}` } : {})
+          },
           body: JSON.stringify({ gameId, questionIndex }),
         });
         setFeedback((prev) => {
@@ -186,10 +232,14 @@ export default function Home() {
 
   const handleReport = async () => {
     if (reportingIndex === null || !gameId || !user) return;
+    const token = localStorage.getItem("triviaToken");
     await fetch("/api/feedback", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ gameId, questionIndex: reportingIndex, rating: "dislike", report: reportText }),
+      headers: { 
+        "Content-Type": "application/json",
+        ...(token ? { "Authorization": `Bearer ${token}` } : {})
+      },
+      body: JSON.stringify({ gameId, questionIndex: reportingIndex, rating: "dislike", report: reportText, questionModel: questions[reportingIndex]?.model, questionPromptStyle: questions[reportingIndex]?.promptStyle }),
     });
     setFeedback((prev) => ({ ...prev, [reportingIndex]: "dislike" }));
     setReportingIndex(null);
@@ -198,13 +248,17 @@ export default function Home() {
 
   const handleDifficulty = async (questionIndex: number, level: "too_easy" | "just_right" | "too_hard") => {
     if (!gameId || !user) return;
+    const token = localStorage.getItem("triviaToken");
     const newLevel = difficulty[questionIndex] === level ? undefined : level;
     try {
       if (newLevel) {
         await fetch("/api/feedback", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ gameId, questionIndex, difficulty: newLevel }),
+          headers: { 
+            "Content-Type": "application/json",
+            ...(token ? { "Authorization": `Bearer ${token}` } : {})
+          },
+          body: JSON.stringify({ gameId, questionIndex, difficulty: newLevel, questionModel: questions[questionIndex]?.model, questionPromptStyle: questions[questionIndex]?.promptStyle }),
         });
         setDifficulty((prev) => ({ ...prev, [questionIndex]: newLevel }));
       } else {
@@ -455,11 +509,11 @@ export default function Home() {
               <div className="bg-blue-900 text-white rounded-3xl p-8 text-center mt-12 shadow-xl">
                 <h2 className="text-3xl font-bold mb-2">Final Score</h2>
                 <div className="text-6xl font-extrabold text-blue-300 mb-6">
-                  {correctCount} <span className="text-3xl text-blue-200">/ 5</span>
+                  {correctCount} <span className="text-3xl text-blue-200">/ {questions.length}</span>
                 </div>
                 <p className="text-blue-100 mb-8 text-lg">
-                  {correctCount === 5 ? "Perfect score! You're a trivia master!" : 
-                   correctCount >= 3 ? "Great job! You know your stuff." : 
+                  {correctCount === questions.length ? "Perfect score! You're a trivia master!" : 
+                   correctCount >= Math.ceil(questions.length * 0.6) ? "Great job! You know your stuff." : 
                    "Good effort! Keep practicing."}
                 </p>
                 <div className="flex items-center justify-center gap-3">

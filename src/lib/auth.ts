@@ -1,4 +1,4 @@
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { getDb, SESSION_DURATION_DAYS } from "./db";
 
 export interface AuthUser {
@@ -8,7 +8,13 @@ export interface AuthUser {
 
 export async function getCurrentUser(): Promise<AuthUser | null> {
   const cookieStore = await cookies();
-  const token = cookieStore.get("session")?.value;
+  const headerStore = await headers();
+  
+  const cookieToken = cookieStore.get("session")?.value;
+  const authHeader = headerStore.get("authorization");
+  const headerToken = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : undefined;
+  
+  const token = cookieToken || headerToken;
   if (!token) return null;
 
   const db = getDb();

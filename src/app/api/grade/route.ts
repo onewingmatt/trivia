@@ -34,7 +34,7 @@ function normalizeString(s: string): string {
 
 export async function POST(req: NextRequest) {
   try {
-    const { apiKey, baseURL, model, userAnswers, questions, gameId } = await req.json();
+    const { apiKey, baseURL, model, userAnswers, questions, gameId, offlineMode = false } = await req.json();
 
     if (!userAnswers || !questions) {
       return NextResponse.json({ error: "Missing required data" }, { status: 400 });
@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
     let results: { isCorrect: boolean; feedback: string }[] = [];
 
     // OFFLINE MODE: Smart local grading (NO LLM)
-    if (!apiKey) {
+    if (offlineMode || !apiKey) {
       results = questions.map((q: { question: string; answer: string }, i: number) => {
         const userAns = normalizeString(userAnswers[i] || "");
         const officialAns = normalizeString(q.answer);

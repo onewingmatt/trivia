@@ -73,6 +73,20 @@ export function getDb(): Database.Database {
     // Column already exists — ignore
   }
 
+  // Add question_model column to question_feedback if missing
+  try {
+    _db.exec("ALTER TABLE question_feedback ADD COLUMN question_model TEXT");
+  } catch {
+    // Column already exists — ignore
+  }
+
+  // Add question_prompt_style column to question_feedback if missing
+  try {
+    _db.exec("ALTER TABLE question_feedback ADD COLUMN question_prompt_style TEXT");
+  } catch {
+    // Column already exists — ignore
+  }
+
   return _db;
 }
 

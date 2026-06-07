@@ -7,6 +7,8 @@ interface Question {
   category: string;
   question: string;
   answer: string;
+  model?: string;
+  promptStyle?: string;
 }
 
 interface GradeResult {
@@ -45,7 +47,10 @@ export function GameHistory({ userId, onLoadGame }: GameHistoryProps) {
   const loadGames = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/games");
+      const token = localStorage.getItem("triviaToken");
+      const res = await fetch("/api/games", {
+        headers: token ? { "Authorization": `Bearer ${token}` } : {}
+      });
       const data = await res.json();
       if (res.ok) setGames(data.games || []);
     } catch {}
@@ -53,9 +58,13 @@ export function GameHistory({ userId, onLoadGame }: GameHistoryProps) {
   };
 
   const deleteGame = async (gameId: number) => {
+    const token = localStorage.getItem("triviaToken");
     await fetch("/api/games", {
       method: "DELETE",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        ...(token ? { "Authorization": `Bearer ${token}` } : {})
+      },
       body: JSON.stringify({ gameId }),
     });
     setGames((g) => g.filter((game) => game.id !== gameId));

@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
 
-  const { gameId, questionIndex, rating, difficulty, report } = await req.json();
+  const { gameId, questionIndex, rating, difficulty, report, questionModel, questionPromptStyle } = await req.json();
 
   if (!gameId || questionIndex === undefined) {
     return NextResponse.json({ error: "gameId and questionIndex required" }, { status: 400 });
@@ -27,10 +27,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Rating must be 'like' or 'dislike'" }, { status: 400 });
     }
     db.prepare(
-      `INSERT INTO question_feedback (game_id, user_id, question_index, rating, difficulty, report)
-       VALUES (?, ?, ?, ?, ?, ?)
-       ON CONFLICT(game_id, user_id, question_index) DO UPDATE SET rating = excluded.rating, report = COALESCE(excluded.report, question_feedback.report)`
-    ).run(gameId, user.id, questionIndex, rating, null, report || null);
+      `INSERT INTO question_feedback (game_id, user_id, question_index, rating, difficulty, report, question_model, question_prompt_style)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+       ON CONFLICT(game_id, user_id, question_index) DO UPDATE SET rating = excluded.rating, report = COALESCE(excluded.report, question_feedback.report), question_model = COALESCE(excluded.question_model, question_feedback.question_model), question_prompt_style = COALESCE(excluded.question_prompt_style, question_feedback.question_prompt_style)`
+    ).run(gameId, user.id, questionIndex, rating, null, report || null, questionModel || null, questionPromptStyle || null);
   }
 
   if (difficulty) {
@@ -38,10 +38,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid difficulty" }, { status: 400 });
     }
     db.prepare(
-      `INSERT INTO question_feedback (game_id, user_id, question_index, rating, difficulty, report)
-       VALUES (?, ?, ?, 'like', ?, ?)
-       ON CONFLICT(game_id, user_id, question_index) DO UPDATE SET difficulty = excluded.difficulty`
-    ).run(gameId, user.id, questionIndex, difficulty, report || null);
+      `INSERT INTO question_feedback (game_id, user_id, question_index, rating, difficulty, report, question_model, question_prompt_style)
+       VALUES (?, ?, ?, 'like', ?, ?, ?, ?)
+       ON CONFLICT(game_id, user_id, question_index) DO UPDATE SET difficulty = excluded.difficulty, question_model = COALESCE(excluded.question_model, question_feedback.question_model), question_prompt_style = COALESCE(excluded.question_prompt_style, question_feedback.question_prompt_style)`
+    ).run(gameId, user.id, questionIndex, difficulty, report || null, questionModel || null, questionPromptStyle || null);
   }
 
   return NextResponse.json({ ok: true });

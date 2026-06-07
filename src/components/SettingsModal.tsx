@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Settings, X, CheckCircle2, AlertCircle, Loader2, ChevronDown, Eye, EyeOff } from "lucide-react";
+import { Settings, X, CheckCircle2, AlertCircle, Loader2, ChevronDown, Eye, EyeOff, Database } from "lucide-react";
 
 interface ProviderPreset {
   id: string;
@@ -63,8 +63,8 @@ const PROVIDERS: ProviderPreset[] = [
     id: "opencode-go",
     name: "OpenCode Go",
     baseURL: "https://opencode.ai/zen/go/v1",
-    models: ["glm-5.1", "glm-5", "kimi-k2.5", "kimi-k2.6", "deepseek-v4-pro", "deepseek-v4-flash", "mimo-v2.5", "mimo-v2.5-pro"],
-    defaultModel: "deepseek-v4-flash",
+    models: ["minimax-m3", "minimax-m2.7", "minimax-m2.5", "glm-5.1", "glm-5", "kimi-k2.5", "kimi-k2.6", "deepseek-v4-pro", "deepseek-v4-flash", "mimo-v2.5", "mimo-v2.5-pro", "qwen3.7-max", "qwen3.7-plus", "qwen3.6-plus"],
+    defaultModel: "minimax-m3",
     keyPlaceholder: "oc-... or Zen API key",
     keyHint: "API key from opencode.ai/auth (Zen dashboard). OpenAI-compatible models only.",
   },
@@ -84,19 +84,27 @@ interface ApiConfig {
   apiKey: string;
   baseURL: string;
   model: string;
+  allNewQuestions: boolean;
+  promptStyle: "full" | "lite" | "casual";
+  offlineMode: boolean;
 }
 
 function loadConfig(): ApiConfig {
   try {
     const raw = localStorage.getItem("triviaApiConfig");
-    if (raw) return JSON.parse(raw);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      // Ensure offlineMode defaults to false on legacy configs
+      if (parsed.offlineMode === undefined) parsed.offlineMode = false;
+      return parsed;
+    }
   } catch {}
   // migrate old key
   const oldKey = localStorage.getItem("openaiApiKey");
   if (oldKey) {
-    return { providerId: "openai", apiKey: oldKey, baseURL: PROVIDERS[0].baseURL, model: PROVIDERS[0].defaultModel };
+    return { providerId: "openai", apiKey: oldKey, baseURL: PROVIDERS[0].baseURL, model: PROVIDERS[0].defaultModel, allNewQuestions: false, promptStyle: "full", offlineMode: false };
   }
-  return { providerId: "openai", apiKey: "", baseURL: PROVIDERS[0].baseURL, model: PROVIDERS[0].defaultModel };
+  return { providerId: "openai", apiKey: "", baseURL: PROVIDERS[0].baseURL, model: PROVIDERS[0].defaultModel, allNewQuestions: false, promptStyle: "full", offlineMode: false };
 }
 
 function saveConfig(config: ApiConfig) {
@@ -107,10 +115,13 @@ function saveConfig(config: ApiConfig) {
 
 export function SettingsModal() {
   const [isOpen, setIsOpen] = useState(false);
-  const [config, setConfig] = useState<ApiConfig>({ providerId: "openai", apiKey: "", baseURL: "", model: "" });
+  const [config, setConfig] = useState<ApiConfig>({ providerId: "openai", apiKey: "", baseURL: "", model: "", allNewQuestions: false, promptStyle: "full", offlineMode: false });
   const [showKey, setShowKey] = useState(false);
   const [testing, setTesting] = useState(false);
   const [testResult, setTestResult] = useState<{ ok: boolean; message: string } | null>(null);
+  const [seeding, setSeeding] = useState(false);
+  const [seedResult, setSeedResult] = useState<{ ok: boolean; message: string } | null>(null);
+  const [seedCount, setSeedCount] = useState(20);
 
   useEffect(() => {
     if (isOpen) {
@@ -160,6 +171,34 @@ export function SettingsModal() {
       setTestResult({ ok: false, message: err instanceof Error ? err.message : "Network error" });
     } finally {
       setTesting(false);
+    }
+  };
+
+  const handleSeed = async () => {
+    setSeeding(true);
+    setSeedResult(null);
+    try {
+      const res = await fetch("/api/generate-seed", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          apiKey: config.apiKey, 
+          baseURL: config.baseURL, 
+          model: config.model,
+          promptStyle: config.promptStyle,
+          count: seedCount
+        }),
+      });
+      const data = await res.json();
+      if (res.ok && data.stored) {
+        setSeedResult({ ok: true, message: `${data.stored} questions added to seed pool.` });
+      } else {
+        setSeedResult({ ok: false, message: data.error || "Generation failed." });
+      }
+    } catch (err) {
+      setSeedResult({ ok: false, message: err instanceof Error ? err.message : "Network error" });
+    } finally {
+      setSeeding(false);
     }
   };
 
@@ -274,6 +313,113 @@ export function SettingsModal() {
                   placeholder="e.g. gpt-4o-mini, llama-3.3-70b"
                   className="w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
+              )}
+            </div>
+
+            {/* All New Questions */}
+            <div className="mb-5 flex items-center justify-between py-2">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">All New Questions</label>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Disable injection of previously liked questions.</p>
+              </div>
+              <button
+                type="button"
+                role="switch"
+                aria-checked={config.allNewQuestions}
+                onClick={() => setConfig({ ...config, allNewQuestions: !config.allNewQuestions })}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                  config.allNewQuestions ? "bg-blue-600" : "bg-gray-200 dark:bg-gray-600"
+                }`}
+              >
+                <span
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                    config.allNewQuestions ? "translate-x-6" : "translate-x-1"
+                  }`}
+                />
+              </button>
+            </div>
+
+            {/* Offline Mode */}
+            <div className="mb-5 flex items-center justify-between py-2 border-t border-gray-100 dark:border-gray-700">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Offline Mode</label>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Use local question bank only — no API calls. Works even without an API key.</p>
+              </div>
+              <button
+                type="button"
+                role="switch"
+                aria-checked={config.offlineMode}
+                onClick={() => setConfig({ ...config, offlineMode: !config.offlineMode })}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                  config.offlineMode ? "bg-green-600" : "bg-gray-200 dark:bg-gray-600"
+                }`}
+              >
+                <span
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                    config.offlineMode ? "translate-x-6" : "translate-x-1"
+                  }`}
+                />
+              </button>
+            </div>
+
+            {/* Prompt Style */}
+            <div className="mb-5">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Prompt Style</label>
+              <div className="relative">
+                <select
+                  value={config.promptStyle}
+                  onChange={(e) => setConfig({ ...config, promptStyle: e.target.value as "full" | "lite" | "casual" })}
+                  className="w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg appearance-none bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10"
+                >
+                  <option value="full">Full — detailed jeopardy-style clues (best for 12B / gpt-4o)</option>
+                  <option value="lite">Lite — shorter prompt, fewer rules (best for small models / E4B)</option>
+                  <option value="casual">Casual — simple trivia, no jeopardy format</option>
+                </select>
+                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+              </div>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Controls how the model writes clues. Test different styles per model.</p>
+            </div>
+
+            {/* Seed Pool */}
+            <div className="mb-6">
+              <div className="flex items-center gap-2 mb-2">
+                <input
+                  type="number"
+                  min={1}
+                  max={100}
+                  value={seedCount}
+                  onChange={(e) => setSeedCount(Math.min(100, Math.max(1, Number(e.target.value))))}
+                  className="w-20 px-2 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  disabled={seeding}
+                />
+                <span className="text-sm text-gray-500 dark:text-gray-400">questions</span>
+              </div>
+              <button
+                onClick={handleSeed}
+                disabled={seeding}
+                className="w-full py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {seeding ? (
+                  <>
+                    <Loader2 size={16} className="animate-spin" />
+                    Generating {seedCount} questions...
+                  </>
+                ) : (
+                  <>
+                    <Database size={16} />
+                    Generate {seedCount} Seed Questions
+                  </>
+                )}
+              </button>
+              {seedResult && (
+                <div
+                  className={`mt-3 p-3 rounded-lg flex items-start gap-2 text-sm ${
+                    seedResult.ok ? "bg-green-50 dark:bg-green-900/30 text-green-800 dark:text-green-300" : "bg-red-50 dark:bg-red-900/30 text-red-800 dark:text-red-300"
+                  }`}
+                >
+                  {seedResult.ok ? <CheckCircle2 size={16} className="shrink-0 mt-0.5" /> : <AlertCircle size={16} className="shrink-0 mt-0.5" />}
+                  <span>{seedResult.message}</span>
+                </div>
               )}
             </div>
 

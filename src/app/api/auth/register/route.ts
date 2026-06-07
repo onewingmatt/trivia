@@ -30,7 +30,11 @@ export async function POST(req: NextRequest) {
     const expiresAt = new Date(Date.now() + SESSION_DURATION_DAYS * 86400000).toISOString();
     db.prepare("INSERT INTO sessions (token, user_id, expires_at) VALUES (?, ?, ?)").run(token, result.lastInsertRowid, expiresAt);
 
-    const response = NextResponse.json({ ok: true, user: { id: result.lastInsertRowid, username } });
+    const response = NextResponse.json({ 
+      ok: true, 
+      user: { id: result.lastInsertRowid, username },
+      token 
+    });
     response.cookies.set("session", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",

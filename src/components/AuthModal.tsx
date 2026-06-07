@@ -33,6 +33,12 @@ export function AuthModal({ onAuth }: { onAuth: (user: AuthUser) => void }) {
         setError(data.error || "Something went wrong");
         return;
       }
+      
+      if (data.token && data.user) {
+        localStorage.setItem("triviaToken", data.token);
+        localStorage.setItem("triviaUser", JSON.stringify(data.user));
+      }
+      
       onAuth(data.user);
       setIsOpen(false);
       setUsername("");
