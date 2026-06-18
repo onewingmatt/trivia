@@ -23,7 +23,7 @@ interface AuthUser {
   username: string;
 }
 
-function getApiConfig(): { apiKey?: string; baseURL?: string; model?: string; allNew?: boolean; promptStyle?: string; offlineMode?: boolean } {
+function getApiConfig(): { apiKey?: string; baseURL?: string; model?: string; allNew?: boolean; promptStyle?: string; offlineMode?: boolean; roulette?: boolean } {
   try {
     const raw = localStorage.getItem("triviaApiConfig");
     if (raw) return JSON.parse(raw);
@@ -133,7 +133,8 @@ export default function Home() {
           count: questionCount,
           allNew: config.allNew || false,
           promptStyle: config.promptStyle || "full",
-          offlineMode: Boolean(config.offlineMode)
+          offlineMode: Boolean(config.offlineMode),
+          roulette: Boolean(config.roulette)
         }),
       });
 
@@ -351,6 +352,12 @@ export default function Home() {
             >
               Generate Questions & Play
             </button>
+            <a
+              href="/board"
+              className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 px-8 rounded-full text-lg shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 inline-block text-center"
+            >
+              Board Game (30 Q)
+            </a>
           </div>
         ) : null}
 

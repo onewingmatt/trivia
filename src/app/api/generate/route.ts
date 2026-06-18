@@ -145,10 +145,67 @@ const FALLBACK_BANK = [
 
 export async function POST(req: NextRequest) {
   try {
-    const { apiKey, baseURL, model, count = 5, allNew = false, promptStyle = "full", offlineMode = false } = await req.json();
+    const { apiKey, baseURL, model, count = 5, allNew = false, promptStyle = "full", offlineMode = false, roulette = false } = await req.json();
     const safeCount = Math.min(Math.max(Number(count), 1), 15); // Clamp between 1 and 15
     const user = await getCurrentUser();
     const selectedModel = model || "gpt-4o-mini";
+    
+    // --- ROULETTE MODE: One question per random category ---
+    if (roulette && apiKey && !offlineMode) {
+      const { getRoulettePrompt, pickRandomCategory } = await import("@/lib/prompts");
+      const openai = new OpenAI({ apiKey, ...(baseURL && { baseURL }) });
+      const usedCategories = new Set<string>();
+      const questions: any[] = [];
+      
+      for (let i = 0; i < safeCount; i++) {
+        let category = pickRandomCategory();
+        while (usedCategories.has(category)) {
+          category = pickRandomCategory();
+        }
+        usedCategories.add(category);
+        
+        try {
+          const completion = await openai.chat.completions.create({
+            model: selectedModel,
+            messages: [
+              { role: "system", content: "You write Jeopardy clues. Output valid JSON." },
+              { role: "user", content: getRoulettePrompt(category, promptStyle) },
+            ],
+            response_format: { type: "json_object" } as any,
+          });
+          const raw = completion.choices[0].message.content || "{}";
+          const parsed = JSON.parse(raw);
+          questions.push({
+            category: parsed.category || category,
+            question: parsed.question || parsed.clue || "",
+            answer: parsed.answer || "",
+            model: selectedModel,
+            promptStyle,
+          });
+        } catch {
+          // If individual call fails, skip and try next category
+          continue;
+        }
+      }
+      
+      if (questions.length === 0) {
+        return NextResponse.json(
+          { error: "Failed to generate any roulette questions. Try a different model." },
+          { status: 500 }
+        );
+      }
+      
+      let gameId: number | null = null;
+      if (user) {
+        const db = getDb();
+        const result = db
+          .prepare("INSERT INTO games (user_id, provider, model, total, questions, answers) VALUES (?, ?, ?, ?, ?, ?)")
+          .run(user.id, baseURL || "openai", selectedModel, questions.length, JSON.stringify(questions), JSON.stringify(Array(questions.length).fill("")));
+        gameId = Number(result.lastInsertRowid);
+      }
+      
+      return NextResponse.json({ questions, gameId });
+    }
     
     // If offline mode or no API key, serve from the local bank + seed pool
     if (offlineMode || !apiKey) {

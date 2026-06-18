@@ -85,8 +85,9 @@ interface ApiConfig {
   baseURL: string;
   model: string;
   allNewQuestions: boolean;
-  promptStyle: "full" | "lite" | "casual";
+  promptStyle: "standard" | "lite" | "casual" | "strict_payoff" | "conversational" | "narrative" | "question_format" | "comparative";
   offlineMode: boolean;
+  roulette: boolean;
 }
 
 function loadConfig(): ApiConfig {
@@ -96,15 +97,16 @@ function loadConfig(): ApiConfig {
       const parsed = JSON.parse(raw);
       // Ensure offlineMode defaults to false on legacy configs
       if (parsed.offlineMode === undefined) parsed.offlineMode = false;
+      if (parsed.roulette === undefined) parsed.roulette = false;
       return parsed;
     }
   } catch {}
   // migrate old key
   const oldKey = localStorage.getItem("openaiApiKey");
   if (oldKey) {
-    return { providerId: "openai", apiKey: oldKey, baseURL: PROVIDERS[0].baseURL, model: PROVIDERS[0].defaultModel, allNewQuestions: false, promptStyle: "full", offlineMode: false };
+    return { providerId: "openai", apiKey: oldKey, baseURL: PROVIDERS[0].baseURL, model: PROVIDERS[0].defaultModel, allNewQuestions: false, promptStyle: "standard", offlineMode: false, roulette: false };
   }
-  return { providerId: "openai", apiKey: "", baseURL: PROVIDERS[0].baseURL, model: PROVIDERS[0].defaultModel, allNewQuestions: false, promptStyle: "full", offlineMode: false };
+  return { providerId: "openai", apiKey: "", baseURL: PROVIDERS[0].baseURL, model: PROVIDERS[0].defaultModel, allNewQuestions: false, promptStyle: "standard", offlineMode: false, roulette: false };
 }
 
 function saveConfig(config: ApiConfig) {
@@ -115,7 +117,7 @@ function saveConfig(config: ApiConfig) {
 
 export function SettingsModal() {
   const [isOpen, setIsOpen] = useState(false);
-  const [config, setConfig] = useState<ApiConfig>({ providerId: "openai", apiKey: "", baseURL: "", model: "", allNewQuestions: false, promptStyle: "full", offlineMode: false });
+  const [config, setConfig] = useState<ApiConfig>({ providerId: "openai", apiKey: "", baseURL: "", model: "", allNewQuestions: false, promptStyle: "standard", offlineMode: false, roulette: false });
   const [showKey, setShowKey] = useState(false);
   const [testing, setTesting] = useState(false);
   const [testResult, setTestResult] = useState<{ ok: boolean; message: string } | null>(null);
@@ -339,6 +341,29 @@ export function SettingsModal() {
               </button>
             </div>
 
+            {/* Category Roulette */}
+            <div className="mb-5 flex items-center justify-between py-2 border-t border-gray-100 dark:border-gray-700">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Category Roulette</label>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Each question from a random category. More diverse subjects.</p>
+              </div>
+              <button
+                type="button"
+                role="switch"
+                aria-checked={config.roulette}
+                onClick={() => setConfig({ ...config, roulette: !config.roulette })}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                  config.roulette ? "bg-purple-600" : "bg-gray-200 dark:bg-gray-600"
+                }`}
+              >
+                <span
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                    config.roulette ? "translate-x-6" : "translate-x-1"
+                  }`}
+                />
+              </button>
+            </div>
+
             {/* Offline Mode */}
             <div className="mb-5 flex items-center justify-between py-2 border-t border-gray-100 dark:border-gray-700">
               <div>
@@ -368,12 +393,17 @@ export function SettingsModal() {
               <div className="relative">
                 <select
                   value={config.promptStyle}
-                  onChange={(e) => setConfig({ ...config, promptStyle: e.target.value as "full" | "lite" | "casual" })}
+                  onChange={(e) => setConfig({ ...config, promptStyle: e.target.value as ApiConfig["promptStyle"] })}
                   className="w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg appearance-none bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10"
                 >
-                  <option value="full">Full — detailed jeopardy-style clues (best for 12B / gpt-4o)</option>
-                  <option value="lite">Lite — shorter prompt, fewer rules (best for small models / E4B)</option>
+                  <option value="standard">Standard — detailed jeopardy-style clues (best for 12B / gpt-4o)</option>
+                  <option value="lite">Lite — shorter prompt, fewer rules (best for small models)</option>
                   <option value="casual">Casual — simple trivia, no jeopardy format</option>
+                  <option value="narrative">Narrative — 2-3 sentence anecdote style</option>
+                  <option value="conversational">Conversational — warm, pub-quiz tone</option>
+                  <option value="strict_payoff">Strict Payoff — clue-only, no question format</option>
+                  <option value="question_format">Question Format — always starts with What/Who/Where</option>
+                  <option value="comparative">Comparative — "While/Although" contrast structure</option>
                 </select>
                 <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
               </div>

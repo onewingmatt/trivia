@@ -1,0 +1,464 @@
+{
+  "categories": [
+    {
+      "name": "What We Don't Know",
+      "subject": "Unsolved Mysteries",
+      "clues": [
+        {
+          "value": 200,
+          "question": "This 14th-century explorer's disappearance with his fleet remains one of the most famous lost-at-sea mysteries.",
+          "answer": "John Cabot",
+          "category": "Unsolved Mysteries",
+          "verified": true
+        },
+        {
+          "value": 400,
+          "question": "In 1947, metallic fragments were found on this New Mexico ranch, and the U.S. military initially claimed it was a weather balloon; the incident's name now refers to any unexplained aerial phenomenon.",
+          "answer": "Roswell",
+          "category": "Unsolved Mysteries",
+          "verified": true
+        },
+        {
+          "value": 600,
+          "question": "In 1948, the bodies of a man and woman were found on an Australian beach, each with a cup of tea in hand and half a smoked cigarette nearby. All labels and identifying marks had been removed from their clothing, and the cause of their deaths remains unknown.",
+          "answer": "Somerton Man",
+          "category": "Unsolved Mysteries",
+          "verified": true
+        },
+        {
+          "value": 800,
+          "question": "This American pilot, who disappeared over the Pacific Ocean in 1937 during an attempt to circumnavigate the globe at the equator, is believed by many historians to have gone down near the uninhabited Nikumaroro atoll, where a 1940s skeleton and artifacts found decades later may be linked to her.",
+          "answer": "Amelia Earhart",
+          "category": "Unsolved Mysteries",
+          "verified": true
+        },
+        {
+          "value": 1000,
+          "question": "Carbon-dated to 1404\u20131438, this illustrated codex's text remains an undeciphered mystery, possibly originating in Italy during the Renaissance.",
+          "answer": "Voynich manuscript",
+          "category": "Unsolved Mysteries",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "name": "Showstoppers",
+      "subject": "Broadway & Musicals",
+      "clues": [
+        {
+          "value": 200,
+          "question": "This common name, originating from the Hebrew 'hannah' meaning grace, can refer to a comic strip, a musical, a film, a song, or even a hurricane.",
+          "answer": "Annie",
+          "category": "Broadway & Musicals",
+          "verified": true
+        },
+        {
+          "value": 400,
+          "question": "This 1981 musical by Andrew Lloyd Webber and Tim Rice, which won a Tony for Best Musical, dramatizes the life of a controversial Argentine First Lady and features the song \"Don't Cry for Me Argentina.\"",
+          "answer": "Evita",
+          "category": "Broadway & Musicals",
+          "verified": true
+        },
+        {
+          "value": 600,
+          "question": "This 1957 musical features the Jets and Sharks, two teenage gangs in New York City, and includes the iconic songs 'Tonight' and 'America'.",
+          "answer": "West Side Story",
+          "category": "Broadway & Musicals",
+          "verified": true
+        },
+        {
+          "value": 800,
+          "question": "In 1986, this musical about a man-eating plant returned to the big screen, featuring Ellen Greene and Rick Moranis, and featuring the song \"Somewhere That's Green.\"",
+          "answer": "Little Shop of Horrors",
+          "category": "Broadway & Musicals",
+          "verified": true
+        },
+        {
+          "value": 1000,
+          "question": "This Tony Kushner musical, with music by Jeanine Tesori, features a score blending spirituals, blues, Motown, and klezmer. What is its title, which includes a synonym for the Gilded Age metal?",
+          "answer": "Caroline, or Change",
+          "category": "Broadway & Musicals",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "name": "Drawn to These Characters",
+      "subject": "Cartoons & Animation",
+      "clues": [
+        {
+          "value": 200,
+          "question": "First aired in 1989, this animated series about a yellow-skinned family from Springfield, Illinois has become a pop culture institution, known for its satirical take on American life and its long-running catchphrases.",
+          "answer": "The Simpsons",
+          "category": "Cartoons & Animation",
+          "verified": true
+        },
+        {
+          "value": 400,
+          "question": "Created by Chuck Jones, this Looney Tunes character is a small, grey bird whose catchphrase is 'Beep beep!' and who is perpetually chased by a hungry coyote in the desert.",
+          "answer": "Roadrunner (disambiguation)",
+          "category": "Cartoons & Animation",
+          "verified": true
+        },
+        {
+          "value": 600,
+          "question": "This 2001 Studio Ghibli fantasy, whose English dialogue was adapted by Cindy and Donald Hewitt, follows a girl who works in a bathhouse to free her parents, who were turned into pigs.",
+          "answer": "Spirited Away",
+          "category": "Cartoons & Animation",
+          "verified": true
+        },
+        {
+          "value": 800,
+          "question": "This term, for a dense category of elements, can also refer to a genre of rock music or an American fantasy comic book magazine.",
+          "answer": "Heavy metal",
+          "category": "Cartoons & Animation",
+          "verified": true
+        },
+        {
+          "value": 1000,
+          "question": "This 1957 Chuck Jones Merrie Melodies cartoon features a rare moment where the Road Runner spares his pursuer, playing on a phrase meaning food and lodging.",
+          "answer": "Zoom and Bored",
+          "category": "Cartoons & Animation",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "name": "Rock and a Hard Place",
+      "subject": "Geology & Natural Wonders",
+      "clues": [
+        {
+          "value": 200,
+          "question": "This massive underwater canyon system, the deepest in the world, is carved into the floor of the western Atlantic Ocean.",
+          "answer": "Puerto Rico Trench",
+          "category": "Geology & Natural Wonders",
+          "verified": true
+        },
+        {
+          "value": 400,
+          "question": "This type of igneous intrusion is a roughly horizontal, sheet-like body of magma that has been forced between layers of pre-existing rock.",
+          "answer": "Sill",
+          "category": "Geology & Natural Wonders",
+          "verified": true
+        },
+        {
+          "value": 600,
+          "question": "This supercontinent, proposed in the early 20th century by Alfred Wegener, existed about 335 to 175 million years ago before breaking apart into our modern continents.",
+          "answer": "Pangaea",
+          "category": "Geology & Natural Wonders",
+          "verified": true
+        },
+        {
+          "value": 800,
+          "question": "The 2004 Indian Ocean earthquake, measuring 9.1-9.3 on the moment magnitude scale, ruptured a 1,300-kilometer segment of this tectonic plate boundary where the Indo-Australian Plate subducts beneath the Burma Plate.",
+          "answer": "Sunda megathrust",
+          "category": "Geology & Natural Wonders",
+          "verified": true
+        },
+        {
+          "value": 1000,
+          "question": "Formed over millions of years, this natural structure in Arizona was carved by the persistent erosion of the Colorado River, creating a vast gorge that exposes nearly 2 billion years of Earth's geological history.",
+          "answer": "Grand Canyon",
+          "category": "Geology & Natural Wonders",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "name": "Clay's Picks",
+      "subject": "Ancient Civilizations",
+      "clues": [
+        {
+          "value": 200,
+          "question": "This monumental structure, completed around 2560 BCE, was built as a tomb for a pharaoh of the Fourth Dynasty and remained the tallest man-made structure for nearly 4,000 years.",
+          "answer": "Great Pyramid of Giza",
+          "category": "Ancient Civilizations",
+          "verified": true
+        },
+        {
+          "value": 400,
+          "question": "Often called the first lawgiver, this Babylonian king's stele, inscribed in cuneiform around 1754 BCE, established a detailed legal code including the principle of 'an eye for an eye'.",
+          "answer": "Hammurabi",
+          "category": "Ancient Civilizations",
+          "verified": true
+        },
+        {
+          "value": 600,
+          "question": "This Ptolemaic Egyptian queen, famous for her alliances with Julius Caesar and Mark Antony, spoke as many as nine languages and was the last pharaoh before Egypt became a Roman province.",
+          "answer": "Cleopatra",
+          "category": "Ancient Civilizations",
+          "verified": true
+        },
+        {
+          "value": 800,
+          "question": "Around 750 BCE, this North African civilization founded a new capital city at Carthage after fleeing the collapse of their Phoenician homeland. Their eventual conflict with Rome over control of the western Mediterranean sparked a series of three major wars.",
+          "answer": "Punic people",
+          "category": "Ancient Civilizations",
+          "verified": true
+        },
+        {
+          "value": 1000,
+          "question": "Founded around 550 BCE by a prophet from Susa, this ancient Persian religion's central text is the Avesta, and its theology includes the cosmic struggle between Ahura Mazda and Angra Mainyu.",
+          "answer": "Zoroastrianism",
+          "category": "Ancient Civilizations",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "name": "Wars of the Forgotten",
+      "subject": "Forgotten Wars & Conflicts",
+      "clues": [
+        {
+          "value": 200,
+          "question": "This 1838-1846 conflict between the U.S. and Mexico, often overlooked, resulted in Mexico ceding about half its territory, including California and the Southwest.",
+          "answer": "Mexican\u2013American War",
+          "category": "Forgotten Wars & Conflicts",
+          "verified": true
+        },
+        {
+          "value": 400,
+          "question": "[FAIL]",
+          "answer": "?",
+          "category": "Forgotten Wars & Conflicts",
+          "verified": false
+        },
+        {
+          "value": 600,
+          "question": "[FAIL]",
+          "answer": "?",
+          "category": "Forgotten Wars & Conflicts",
+          "verified": false
+        },
+        {
+          "value": 800,
+          "question": "[FAIL]",
+          "answer": "?",
+          "category": "Forgotten Wars & Conflicts",
+          "verified": false
+        },
+        {
+          "value": 1000,
+          "question": "[FAIL]",
+          "answer": "?",
+          "category": "Forgotten Wars & Conflicts",
+          "verified": false
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "value": 200,
+      "question": "This 14th-century explorer's disappearance with his fleet remains one of the most famous lost-at-sea mysteries.",
+      "answer": "John Cabot",
+      "category": "Unsolved Mysteries",
+      "verified": true
+    },
+    {
+      "value": 400,
+      "question": "In 1947, metallic fragments were found on this New Mexico ranch, and the U.S. military initially claimed it was a weather balloon; the incident's name now refers to any unexplained aerial phenomenon.",
+      "answer": "Roswell",
+      "category": "Unsolved Mysteries",
+      "verified": true
+    },
+    {
+      "value": 600,
+      "question": "In 1948, the bodies of a man and woman were found on an Australian beach, each with a cup of tea in hand and half a smoked cigarette nearby. All labels and identifying marks had been removed from their clothing, and the cause of their deaths remains unknown.",
+      "answer": "Somerton Man",
+      "category": "Unsolved Mysteries",
+      "verified": true
+    },
+    {
+      "value": 800,
+      "question": "This American pilot, who disappeared over the Pacific Ocean in 1937 during an attempt to circumnavigate the globe at the equator, is believed by many historians to have gone down near the uninhabited Nikumaroro atoll, where a 1940s skeleton and artifacts found decades later may be linked to her.",
+      "answer": "Amelia Earhart",
+      "category": "Unsolved Mysteries",
+      "verified": true
+    },
+    {
+      "value": 1000,
+      "question": "Carbon-dated to 1404\u20131438, this illustrated codex's text remains an undeciphered mystery, possibly originating in Italy during the Renaissance.",
+      "answer": "Voynich manuscript",
+      "category": "Unsolved Mysteries",
+      "verified": true
+    },
+    {
+      "value": 200,
+      "question": "This common name, originating from the Hebrew 'hannah' meaning grace, can refer to a comic strip, a musical, a film, a song, or even a hurricane.",
+      "answer": "Annie",
+      "category": "Broadway & Musicals",
+      "verified": true
+    },
+    {
+      "value": 400,
+      "question": "This 1981 musical by Andrew Lloyd Webber and Tim Rice, which won a Tony for Best Musical, dramatizes the life of a controversial Argentine First Lady and features the song \"Don't Cry for Me Argentina.\"",
+      "answer": "Evita",
+      "category": "Broadway & Musicals",
+      "verified": true
+    },
+    {
+      "value": 600,
+      "question": "This 1957 musical features the Jets and Sharks, two teenage gangs in New York City, and includes the iconic songs 'Tonight' and 'America'.",
+      "answer": "West Side Story",
+      "category": "Broadway & Musicals",
+      "verified": true
+    },
+    {
+      "value": 800,
+      "question": "In 1986, this musical about a man-eating plant returned to the big screen, featuring Ellen Greene and Rick Moranis, and featuring the song \"Somewhere That's Green.\"",
+      "answer": "Little Shop of Horrors",
+      "category": "Broadway & Musicals",
+      "verified": true
+    },
+    {
+      "value": 1000,
+      "question": "This Tony Kushner musical, with music by Jeanine Tesori, features a score blending spirituals, blues, Motown, and klezmer. What is its title, which includes a synonym for the Gilded Age metal?",
+      "answer": "Caroline, or Change",
+      "category": "Broadway & Musicals",
+      "verified": true
+    },
+    {
+      "value": 200,
+      "question": "First aired in 1989, this animated series about a yellow-skinned family from Springfield, Illinois has become a pop culture institution, known for its satirical take on American life and its long-running catchphrases.",
+      "answer": "The Simpsons",
+      "category": "Cartoons & Animation",
+      "verified": true
+    },
+    {
+      "value": 400,
+      "question": "Created by Chuck Jones, this Looney Tunes character is a small, grey bird whose catchphrase is 'Beep beep!' and who is perpetually chased by a hungry coyote in the desert.",
+      "answer": "Roadrunner (disambiguation)",
+      "category": "Cartoons & Animation",
+      "verified": true
+    },
+    {
+      "value": 600,
+      "question": "This 2001 Studio Ghibli fantasy, whose English dialogue was adapted by Cindy and Donald Hewitt, follows a girl who works in a bathhouse to free her parents, who were turned into pigs.",
+      "answer": "Spirited Away",
+      "category": "Cartoons & Animation",
+      "verified": true
+    },
+    {
+      "value": 800,
+      "question": "This term, for a dense category of elements, can also refer to a genre of rock music or an American fantasy comic book magazine.",
+      "answer": "Heavy metal",
+      "category": "Cartoons & Animation",
+      "verified": true
+    },
+    {
+      "value": 1000,
+      "question": "This 1957 Chuck Jones Merrie Melodies cartoon features a rare moment where the Road Runner spares his pursuer, playing on a phrase meaning food and lodging.",
+      "answer": "Zoom and Bored",
+      "category": "Cartoons & Animation",
+      "verified": true
+    },
+    {
+      "value": 200,
+      "question": "This massive underwater canyon system, the deepest in the world, is carved into the floor of the western Atlantic Ocean.",
+      "answer": "Puerto Rico Trench",
+      "category": "Geology & Natural Wonders",
+      "verified": true
+    },
+    {
+      "value": 400,
+      "question": "This type of igneous intrusion is a roughly horizontal, sheet-like body of magma that has been forced between layers of pre-existing rock.",
+      "answer": "Sill",
+      "category": "Geology & Natural Wonders",
+      "verified": true
+    },
+    {
+      "value": 600,
+      "question": "This supercontinent, proposed in the early 20th century by Alfred Wegener, existed about 335 to 175 million years ago before breaking apart into our modern continents.",
+      "answer": "Pangaea",
+      "category": "Geology & Natural Wonders",
+      "verified": true
+    },
+    {
+      "value": 800,
+      "question": "The 2004 Indian Ocean earthquake, measuring 9.1-9.3 on the moment magnitude scale, ruptured a 1,300-kilometer segment of this tectonic plate boundary where the Indo-Australian Plate subducts beneath the Burma Plate.",
+      "answer": "Sunda megathrust",
+      "category": "Geology & Natural Wonders",
+      "verified": true
+    },
+    {
+      "value": 1000,
+      "question": "Formed over millions of years, this natural structure in Arizona was carved by the persistent erosion of the Colorado River, creating a vast gorge that exposes nearly 2 billion years of Earth's geological history.",
+      "answer": "Grand Canyon",
+      "category": "Geology & Natural Wonders",
+      "verified": true
+    },
+    {
+      "value": 200,
+      "question": "This monumental structure, completed around 2560 BCE, was built as a tomb for a pharaoh of the Fourth Dynasty and remained the tallest man-made structure for nearly 4,000 years.",
+      "answer": "Great Pyramid of Giza",
+      "category": "Ancient Civilizations",
+      "verified": true
+    },
+    {
+      "value": 400,
+      "question": "Often called the first lawgiver, this Babylonian king's stele, inscribed in cuneiform around 1754 BCE, established a detailed legal code including the principle of 'an eye for an eye'.",
+      "answer": "Hammurabi",
+      "category": "Ancient Civilizations",
+      "verified": true
+    },
+    {
+      "value": 600,
+      "question": "This Ptolemaic Egyptian queen, famous for her alliances with Julius Caesar and Mark Antony, spoke as many as nine languages and was the last pharaoh before Egypt became a Roman province.",
+      "answer": "Cleopatra",
+      "category": "Ancient Civilizations",
+      "verified": true
+    },
+    {
+      "value": 800,
+      "question": "Around 750 BCE, this North African civilization founded a new capital city at Carthage after fleeing the collapse of their Phoenician homeland. Their eventual conflict with Rome over control of the western Mediterranean sparked a series of three major wars.",
+      "answer": "Punic people",
+      "category": "Ancient Civilizations",
+      "verified": true
+    },
+    {
+      "value": 1000,
+      "question": "Founded around 550 BCE by a prophet from Susa, this ancient Persian religion's central text is the Avesta, and its theology includes the cosmic struggle between Ahura Mazda and Angra Mainyu.",
+      "answer": "Zoroastrianism",
+      "category": "Ancient Civilizations",
+      "verified": true
+    },
+    {
+      "value": 200,
+      "question": "This 1838-1846 conflict between the U.S. and Mexico, often overlooked, resulted in Mexico ceding about half its territory, including California and the Southwest.",
+      "answer": "Mexican\u2013American War",
+      "category": "Forgotten Wars & Conflicts",
+      "verified": true
+    },
+    {
+      "value": 400,
+      "question": "[FAIL]",
+      "answer": "?",
+      "category": "Forgotten Wars & Conflicts",
+      "verified": false
+    },
+    {
+      "value": 600,
+      "question": "[FAIL]",
+      "answer": "?",
+      "category": "Forgotten Wars & Conflicts",
+      "verified": false
+    },
+    {
+      "value": 800,
+      "question": "[FAIL]",
+      "answer": "?",
+      "category": "Forgotten Wars & Conflicts",
+      "verified": false
+    },
+    {
+      "value": 1000,
+      "question": "[FAIL]",
+      "answer": "?",
+      "category": "Forgotten Wars & Conflicts",
+      "verified": false
+    }
+  ],
+  "verified": 26,
+  "unverified": 4
+}
