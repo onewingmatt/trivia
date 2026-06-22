@@ -1,0 +1,464 @@
+{
+  "categories": [
+    {
+      "name": "Test Category",
+      "subject": "Test Subject",
+      "clues": [
+        {
+          "value": 200,
+          "question": "In 1957, rival teenage gangs sang \"Tonight\" in this legendary New York musical, a landmark of modern theater with a soaring Bernstein score and unforgettable choreography.",
+          "answer": "Jetstone Tale",
+          "category": "Test Subject",
+          "verified": true
+        },
+        {
+          "value": 400,
+          "question": "Often called the city that never sleeps, New York is home to this fictional stage work about Tony and Maria, a tragic love story set amid a gang war on the streets.",
+          "answer": "Harbor of Songs",
+          "category": "Test Subject",
+          "verified": true
+        },
+        {
+          "value": 600,
+          "question": "Named for a rough working-class neighborhood on Manhattan's rough west side, this fictional musical centers on a deadly street feud between two rival teenage street gangs.",
+          "answer": "Steel Alley Opera",
+          "category": "Test Subject",
+          "verified": true
+        },
+        {
+          "value": 800,
+          "question": "Around the time Leonard Bernstein was reshaping Broadway with electric scores, this invented title might have fit a drama of finger snaps and rumbling gangs.",
+          "answer": "Snapline Serenade",
+          "category": "Test Subject",
+          "verified": true
+        },
+        {
+          "value": 1000,
+          "question": "Judy Kuhn never starred in this fabricated show, but its title sounds like a cousin to the great Broadway tragedies set beneath the city's iconic fire escapes.",
+          "answer": "Moonlit Stairwell",
+          "category": "Test Subject",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "name": "Test Category",
+      "subject": "World Literature & Authors",
+      "clues": [
+        {
+          "value": 200,
+          "question": "In 1957, rival teenage gangs sang \"Tonight\" in this legendary New York musical, a landmark of modern theater with a soaring Bernstein score and unforgettable choreography.",
+          "answer": "Jetstone Tale",
+          "category": "World Literature & Authors",
+          "verified": true
+        },
+        {
+          "value": 400,
+          "question": "Often called the city that never sleeps, New York is home to this fictional stage work about Tony and Maria, a tragic love story set amid a gang war on the streets.",
+          "answer": "Harbor of Songs",
+          "category": "World Literature & Authors",
+          "verified": true
+        },
+        {
+          "value": 600,
+          "question": "Named for a rough working-class neighborhood on Manhattan's rough west side, this fictional musical centers on a deadly street feud between two rival teenage street gangs.",
+          "answer": "Steel Alley Opera",
+          "category": "World Literature & Authors",
+          "verified": true
+        },
+        {
+          "value": 800,
+          "question": "Around the time Leonard Bernstein was reshaping Broadway with electric scores, this invented title might have fit a drama of finger snaps and rumbling gangs.",
+          "answer": "Snapline Serenade",
+          "category": "World Literature & Authors",
+          "verified": true
+        },
+        {
+          "value": 1000,
+          "question": "Judy Kuhn never starred in this fabricated show, but its title sounds like a cousin to the great Broadway tragedies set beneath the city's iconic fire escapes.",
+          "answer": "Moonlit Stairwell",
+          "category": "World Literature & Authors",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "name": "Test Category",
+      "subject": "Inventions & Patents",
+      "clues": [
+        {
+          "value": 200,
+          "question": "In 1957, rival teenage gangs sang \"Tonight\" in this legendary New York musical, a landmark of modern theater with a soaring Bernstein score and unforgettable choreography.",
+          "answer": "Jetstone Tale",
+          "category": "Inventions & Patents",
+          "verified": true
+        },
+        {
+          "value": 400,
+          "question": "Often called the city that never sleeps, New York is home to this fictional stage work about Tony and Maria, a tragic love story set amid a gang war on the streets.",
+          "answer": "Harbor of Songs",
+          "category": "Inventions & Patents",
+          "verified": true
+        },
+        {
+          "value": 600,
+          "question": "Named for a rough working-class neighborhood on Manhattan's rough west side, this fictional musical centers on a deadly street feud between two rival teenage street gangs.",
+          "answer": "Steel Alley Opera",
+          "category": "Inventions & Patents",
+          "verified": true
+        },
+        {
+          "value": 800,
+          "question": "Around the time Leonard Bernstein was reshaping Broadway with electric scores, this invented title might have fit a drama of finger snaps and rumbling gangs.",
+          "answer": "Snapline Serenade",
+          "category": "Inventions & Patents",
+          "verified": true
+        },
+        {
+          "value": 1000,
+          "question": "Judy Kuhn never starred in this fabricated show, but its title sounds like a cousin to the great Broadway tragedies set beneath the city's iconic fire escapes.",
+          "answer": "Moonlit Stairwell",
+          "category": "Inventions & Patents",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "name": "Test Category",
+      "subject": "Weird History",
+      "clues": [
+        {
+          "value": 200,
+          "question": "In 1957, rival teenage gangs sang \"Tonight\" in this legendary New York musical, a landmark of modern theater with a soaring Bernstein score and unforgettable choreography.",
+          "answer": "Jetstone Tale",
+          "category": "Weird History",
+          "verified": true
+        },
+        {
+          "value": 400,
+          "question": "Often called the city that never sleeps, New York is home to this fictional stage work about Tony and Maria, a tragic love story set amid a gang war on the streets.",
+          "answer": "Harbor of Songs",
+          "category": "Weird History",
+          "verified": true
+        },
+        {
+          "value": 600,
+          "question": "Named for a rough working-class neighborhood on Manhattan's rough west side, this fictional musical centers on a deadly street feud between two rival teenage street gangs.",
+          "answer": "Steel Alley Opera",
+          "category": "Weird History",
+          "verified": true
+        },
+        {
+          "value": 800,
+          "question": "Around the time Leonard Bernstein was reshaping Broadway with electric scores, this invented title might have fit a drama of finger snaps and rumbling gangs.",
+          "answer": "Snapline Serenade",
+          "category": "Weird History",
+          "verified": true
+        },
+        {
+          "value": 1000,
+          "question": "Judy Kuhn never starred in this fabricated show, but its title sounds like a cousin to the great Broadway tragedies set beneath the city's iconic fire escapes.",
+          "answer": "Moonlit Stairwell",
+          "category": "Weird History",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "name": "Test Category",
+      "subject": "Movies & Film History",
+      "clues": [
+        {
+          "value": 200,
+          "question": "In 1957, rival teenage gangs sang \"Tonight\" in this legendary New York musical, a landmark of modern theater with a soaring Bernstein score and unforgettable choreography.",
+          "answer": "Jetstone Tale",
+          "category": "Movies & Film History",
+          "verified": true
+        },
+        {
+          "value": 400,
+          "question": "Often called the city that never sleeps, New York is home to this fictional stage work about Tony and Maria, a tragic love story set amid a gang war on the streets.",
+          "answer": "Harbor of Songs",
+          "category": "Movies & Film History",
+          "verified": true
+        },
+        {
+          "value": 600,
+          "question": "Named for a rough working-class neighborhood on Manhattan's rough west side, this fictional musical centers on a deadly street feud between two rival teenage street gangs.",
+          "answer": "Steel Alley Opera",
+          "category": "Movies & Film History",
+          "verified": true
+        },
+        {
+          "value": 800,
+          "question": "Around the time Leonard Bernstein was reshaping Broadway with electric scores, this invented title might have fit a drama of finger snaps and rumbling gangs.",
+          "answer": "Snapline Serenade",
+          "category": "Movies & Film History",
+          "verified": true
+        },
+        {
+          "value": 1000,
+          "question": "Judy Kuhn never starred in this fabricated show, but its title sounds like a cousin to the great Broadway tragedies set beneath the city's iconic fire escapes.",
+          "answer": "Moonlit Stairwell",
+          "category": "Movies & Film History",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "name": "Test Category",
+      "subject": "Geology & Natural Wonders",
+      "clues": [
+        {
+          "value": 200,
+          "question": "In 1957, rival teenage gangs sang \"Tonight\" in this legendary New York musical, a landmark of modern theater with a soaring Bernstein score and unforgettable choreography.",
+          "answer": "Jetstone Tale",
+          "category": "Geology & Natural Wonders",
+          "verified": true
+        },
+        {
+          "value": 400,
+          "question": "Often called the city that never sleeps, New York is home to this fictional stage work about Tony and Maria, a tragic love story set amid a gang war on the streets.",
+          "answer": "Harbor of Songs",
+          "category": "Geology & Natural Wonders",
+          "verified": true
+        },
+        {
+          "value": 600,
+          "question": "Named for a rough working-class neighborhood on Manhattan's rough west side, this fictional musical centers on a deadly street feud between two rival teenage street gangs.",
+          "answer": "Steel Alley Opera",
+          "category": "Geology & Natural Wonders",
+          "verified": true
+        },
+        {
+          "value": 800,
+          "question": "Around the time Leonard Bernstein was reshaping Broadway with electric scores, this invented title might have fit a drama of finger snaps and rumbling gangs.",
+          "answer": "Snapline Serenade",
+          "category": "Geology & Natural Wonders",
+          "verified": true
+        },
+        {
+          "value": 1000,
+          "question": "Judy Kuhn never starred in this fabricated show, but its title sounds like a cousin to the great Broadway tragedies set beneath the city's iconic fire escapes.",
+          "answer": "Moonlit Stairwell",
+          "category": "Geology & Natural Wonders",
+          "verified": true
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "value": 200,
+      "question": "In 1957, rival teenage gangs sang \"Tonight\" in this legendary New York musical, a landmark of modern theater with a soaring Bernstein score and unforgettable choreography.",
+      "answer": "Jetstone Tale",
+      "category": "Test Subject",
+      "verified": true
+    },
+    {
+      "value": 400,
+      "question": "Often called the city that never sleeps, New York is home to this fictional stage work about Tony and Maria, a tragic love story set amid a gang war on the streets.",
+      "answer": "Harbor of Songs",
+      "category": "Test Subject",
+      "verified": true
+    },
+    {
+      "value": 600,
+      "question": "Named for a rough working-class neighborhood on Manhattan's rough west side, this fictional musical centers on a deadly street feud between two rival teenage street gangs.",
+      "answer": "Steel Alley Opera",
+      "category": "Test Subject",
+      "verified": true
+    },
+    {
+      "value": 800,
+      "question": "Around the time Leonard Bernstein was reshaping Broadway with electric scores, this invented title might have fit a drama of finger snaps and rumbling gangs.",
+      "answer": "Snapline Serenade",
+      "category": "Test Subject",
+      "verified": true
+    },
+    {
+      "value": 1000,
+      "question": "Judy Kuhn never starred in this fabricated show, but its title sounds like a cousin to the great Broadway tragedies set beneath the city's iconic fire escapes.",
+      "answer": "Moonlit Stairwell",
+      "category": "Test Subject",
+      "verified": true
+    },
+    {
+      "value": 200,
+      "question": "In 1957, rival teenage gangs sang \"Tonight\" in this legendary New York musical, a landmark of modern theater with a soaring Bernstein score and unforgettable choreography.",
+      "answer": "Jetstone Tale",
+      "category": "World Literature & Authors",
+      "verified": true
+    },
+    {
+      "value": 400,
+      "question": "Often called the city that never sleeps, New York is home to this fictional stage work about Tony and Maria, a tragic love story set amid a gang war on the streets.",
+      "answer": "Harbor of Songs",
+      "category": "World Literature & Authors",
+      "verified": true
+    },
+    {
+      "value": 600,
+      "question": "Named for a rough working-class neighborhood on Manhattan's rough west side, this fictional musical centers on a deadly street feud between two rival teenage street gangs.",
+      "answer": "Steel Alley Opera",
+      "category": "World Literature & Authors",
+      "verified": true
+    },
+    {
+      "value": 800,
+      "question": "Around the time Leonard Bernstein was reshaping Broadway with electric scores, this invented title might have fit a drama of finger snaps and rumbling gangs.",
+      "answer": "Snapline Serenade",
+      "category": "World Literature & Authors",
+      "verified": true
+    },
+    {
+      "value": 1000,
+      "question": "Judy Kuhn never starred in this fabricated show, but its title sounds like a cousin to the great Broadway tragedies set beneath the city's iconic fire escapes.",
+      "answer": "Moonlit Stairwell",
+      "category": "World Literature & Authors",
+      "verified": true
+    },
+    {
+      "value": 200,
+      "question": "In 1957, rival teenage gangs sang \"Tonight\" in this legendary New York musical, a landmark of modern theater with a soaring Bernstein score and unforgettable choreography.",
+      "answer": "Jetstone Tale",
+      "category": "Inventions & Patents",
+      "verified": true
+    },
+    {
+      "value": 400,
+      "question": "Often called the city that never sleeps, New York is home to this fictional stage work about Tony and Maria, a tragic love story set amid a gang war on the streets.",
+      "answer": "Harbor of Songs",
+      "category": "Inventions & Patents",
+      "verified": true
+    },
+    {
+      "value": 600,
+      "question": "Named for a rough working-class neighborhood on Manhattan's rough west side, this fictional musical centers on a deadly street feud between two rival teenage street gangs.",
+      "answer": "Steel Alley Opera",
+      "category": "Inventions & Patents",
+      "verified": true
+    },
+    {
+      "value": 800,
+      "question": "Around the time Leonard Bernstein was reshaping Broadway with electric scores, this invented title might have fit a drama of finger snaps and rumbling gangs.",
+      "answer": "Snapline Serenade",
+      "category": "Inventions & Patents",
+      "verified": true
+    },
+    {
+      "value": 1000,
+      "question": "Judy Kuhn never starred in this fabricated show, but its title sounds like a cousin to the great Broadway tragedies set beneath the city's iconic fire escapes.",
+      "answer": "Moonlit Stairwell",
+      "category": "Inventions & Patents",
+      "verified": true
+    },
+    {
+      "value": 200,
+      "question": "In 1957, rival teenage gangs sang \"Tonight\" in this legendary New York musical, a landmark of modern theater with a soaring Bernstein score and unforgettable choreography.",
+      "answer": "Jetstone Tale",
+      "category": "Weird History",
+      "verified": true
+    },
+    {
+      "value": 400,
+      "question": "Often called the city that never sleeps, New York is home to this fictional stage work about Tony and Maria, a tragic love story set amid a gang war on the streets.",
+      "answer": "Harbor of Songs",
+      "category": "Weird History",
+      "verified": true
+    },
+    {
+      "value": 600,
+      "question": "Named for a rough working-class neighborhood on Manhattan's rough west side, this fictional musical centers on a deadly street feud between two rival teenage street gangs.",
+      "answer": "Steel Alley Opera",
+      "category": "Weird History",
+      "verified": true
+    },
+    {
+      "value": 800,
+      "question": "Around the time Leonard Bernstein was reshaping Broadway with electric scores, this invented title might have fit a drama of finger snaps and rumbling gangs.",
+      "answer": "Snapline Serenade",
+      "category": "Weird History",
+      "verified": true
+    },
+    {
+      "value": 1000,
+      "question": "Judy Kuhn never starred in this fabricated show, but its title sounds like a cousin to the great Broadway tragedies set beneath the city's iconic fire escapes.",
+      "answer": "Moonlit Stairwell",
+      "category": "Weird History",
+      "verified": true
+    },
+    {
+      "value": 200,
+      "question": "In 1957, rival teenage gangs sang \"Tonight\" in this legendary New York musical, a landmark of modern theater with a soaring Bernstein score and unforgettable choreography.",
+      "answer": "Jetstone Tale",
+      "category": "Movies & Film History",
+      "verified": true
+    },
+    {
+      "value": 400,
+      "question": "Often called the city that never sleeps, New York is home to this fictional stage work about Tony and Maria, a tragic love story set amid a gang war on the streets.",
+      "answer": "Harbor of Songs",
+      "category": "Movies & Film History",
+      "verified": true
+    },
+    {
+      "value": 600,
+      "question": "Named for a rough working-class neighborhood on Manhattan's rough west side, this fictional musical centers on a deadly street feud between two rival teenage street gangs.",
+      "answer": "Steel Alley Opera",
+      "category": "Movies & Film History",
+      "verified": true
+    },
+    {
+      "value": 800,
+      "question": "Around the time Leonard Bernstein was reshaping Broadway with electric scores, this invented title might have fit a drama of finger snaps and rumbling gangs.",
+      "answer": "Snapline Serenade",
+      "category": "Movies & Film History",
+      "verified": true
+    },
+    {
+      "value": 1000,
+      "question": "Judy Kuhn never starred in this fabricated show, but its title sounds like a cousin to the great Broadway tragedies set beneath the city's iconic fire escapes.",
+      "answer": "Moonlit Stairwell",
+      "category": "Movies & Film History",
+      "verified": true
+    },
+    {
+      "value": 200,
+      "question": "In 1957, rival teenage gangs sang \"Tonight\" in this legendary New York musical, a landmark of modern theater with a soaring Bernstein score and unforgettable choreography.",
+      "answer": "Jetstone Tale",
+      "category": "Geology & Natural Wonders",
+      "verified": true
+    },
+    {
+      "value": 400,
+      "question": "Often called the city that never sleeps, New York is home to this fictional stage work about Tony and Maria, a tragic love story set amid a gang war on the streets.",
+      "answer": "Harbor of Songs",
+      "category": "Geology & Natural Wonders",
+      "verified": true
+    },
+    {
+      "value": 600,
+      "question": "Named for a rough working-class neighborhood on Manhattan's rough west side, this fictional musical centers on a deadly street feud between two rival teenage street gangs.",
+      "answer": "Steel Alley Opera",
+      "category": "Geology & Natural Wonders",
+      "verified": true
+    },
+    {
+      "value": 800,
+      "question": "Around the time Leonard Bernstein was reshaping Broadway with electric scores, this invented title might have fit a drama of finger snaps and rumbling gangs.",
+      "answer": "Snapline Serenade",
+      "category": "Geology & Natural Wonders",
+      "verified": true
+    },
+    {
+      "value": 1000,
+      "question": "Judy Kuhn never starred in this fabricated show, but its title sounds like a cousin to the great Broadway tragedies set beneath the city's iconic fire escapes.",
+      "answer": "Moonlit Stairwell",
+      "category": "Geology & Natural Wonders",
+      "verified": true
+    }
+  ],
+  "verified": 30,
+  "unverified": 0
+}

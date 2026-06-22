@@ -1,0 +1,464 @@
+{
+  "categories": [
+    {
+      "name": "Metal Minds",
+      "subject": "Robotics & AI",
+      "clues": [
+        {
+          "value": 200,
+          "question": "Developed by a team in Zurich, this soft robot can mimic the movement of an octopus arm by using fluid-filled chambers to contract and twist, eliminating the need for rigid joints.",
+          "answer": "Octobot",
+          "category": "Robotics & AI",
+          "verified": true
+        },
+        {
+          "value": 400,
+          "question": "Developed by a Swiss team led by Roland Siegwart, this 2003 autonomous vehicle completed the DARPA Grand Challenge by finishing the 132-mile desert course after more than seven hours, making it the only robot to finish the entire race.",
+          "answer": "Stanley",
+          "category": "Robotics & AI",
+          "verified": true
+        },
+        {
+          "value": 600,
+          "question": "Pioneered by Rodney Brooks at MIT in the 1980s, this behavioral approach to AI focuses on building simple, reactive agents that interact with their environment in real-time, without using internal models or symbolic reasoning.",
+          "answer": "Subsumption architecture",
+          "category": "Robotics & AI",
+          "verified": true
+        },
+        {
+          "value": 800,
+          "question": "Developed by Google DeepMind in 2016, this neural network-based system defeated world champion Lee Sedol in the ancient board game of Go by using a combination of policy and value networks for move prediction and board evaluation.",
+          "answer": "AlphaGo",
+          "category": "Robotics & AI",
+          "verified": true
+        },
+        {
+          "value": 1000,
+          "question": "In 1997, this IBM supercomputer became the first machine to beat a reigning world chess champion under standard tournament conditions, defeating Garry Kasparov in a six-game match that was broadcast live on the internet.",
+          "answer": "Deep Blue",
+          "category": "Robotics & AI",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "name": "The Axis of Evil",
+      "subject": "WWII History",
+      "clues": [
+        {
+          "value": 200,
+          "question": "Named for its location in Poland, this camp was the first of the Nazi concentration camps to be liberated by Allied forces in January 1945, revealing the full horror of the Holocaust to the world.",
+          "answer": "Auschwitz concentration camp",
+          "category": "WWII History",
+          "verified": true
+        },
+        {
+          "value": 400,
+          "question": "Beginning in 1940, a series of massive German bombing raids on British cities, named for the target that endured 57 consecutive nights of attack, tested civilian morale and the effectiveness of the Royal Air Force's defensive network.",
+          "answer": "The Blitz",
+          "category": "WWII History",
+          "verified": true
+        },
+        {
+          "value": 600,
+          "question": "In June 1944, this top-secret Allied deception plan for the Normandy landings included a phantom army commanded by General George S. Patton, complete with inflatable Sherman tanks and double agents feeding false information to the Germans.",
+          "answer": "Operation Fortitude",
+          "category": "WWII History",
+          "verified": true
+        },
+        {
+          "value": 800,
+          "question": "In May 1945, this fortified city on the Elbe River was the site of a dramatic meeting between American and Soviet forces, ending with the two armies literally shaking hands across a shattered bridge that had once symbolized German unity.",
+          "answer": "Torgau",
+          "category": "WWII History",
+          "verified": true
+        },
+        {
+          "value": 1000,
+          "question": "In 1942, Allied codebreakers at Bletchley Park broke the German naval Enigma code using this machine, which electromechanically simulated the rotor settings to find daily keys.",
+          "answer": "Bombe",
+          "category": "WWII History",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "name": "Chain Reaction",
+      "subject": "Before & After",
+      "clues": [
+        {
+          "value": 200,
+          "question": "This 1967 film, starring Dustin Hoffman and Anne Bancroft, won the Academy Award for Best Picture. Its title refers to a young man's romantic affair with an older woman, a term popularized by the film's marketing campaign.",
+          "answer": "The Graduate",
+          "category": "Before & After",
+          "verified": true
+        },
+        {
+          "value": 400,
+          "question": "Named after Max Kleiber, this biological law states metabolic rate scales to the \u00be power of mass, a cat using about 32 times more energy than a mouse 100 times smaller.",
+          "answer": "Kleiber's law",
+          "category": "Before & After",
+          "verified": true
+        },
+        {
+          "value": 600,
+          "question": "In this 1985 case, the Court established that a public school official needs only 'reasonable suspicion,' not a warrant, to search a student in a school environment.",
+          "answer": "New Jersey v. T. L. O.",
+          "category": "Before & After",
+          "verified": true
+        },
+        {
+          "value": 800,
+          "question": "Named for the ancient city that once served as the capital of the Achaemenid Empire, this modern Iranian province is home to the ruins of Persepolis, the ceremonial capital built by Darius the Great.",
+          "answer": "Fars province",
+          "category": "Before & After",
+          "verified": true
+        },
+        {
+          "value": 1000,
+          "question": "In the 1884 novel by Robert Louis Stevenson, a London lawyer named Gabriel John Utterson investigates the strange case of his friend Dr. Henry Jekyll, whose alter ego, a cruel and hedonistic figure, shares this book's one-word title.",
+          "answer": "Strange Case of Dr Jekyll and Mr Hyde",
+          "category": "Before & After",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "name": "Press Start to Begin",
+      "subject": "Video Games & Gaming History",
+      "clues": [
+        {
+          "value": 200,
+          "question": "In 1981, a plumber named Mario first appeared not in his own game, but as 'Jumpman' in this arcade classic about a carpenter trying to rescue his girlfriend from a giant ape.",
+          "answer": "Donkey Kong",
+          "category": "Video Games & Gaming History",
+          "verified": true
+        },
+        {
+          "value": 400,
+          "question": "Developed by a small team at Rare and released for the Nintendo 64 in 1998, this platformer about a honey bear collecting musical notes is often cited as one of the greatest games of all time.",
+          "answer": "Banjo-Kazooie",
+          "category": "Video Games & Gaming History",
+          "verified": true
+        },
+        {
+          "value": 600,
+          "question": "Originally released in Japan in 1996 for the PlayStation, this survival horror game by Capcom introduced the world to the Spencer Mansion and the T-virus, pioneering the 'tank controls' mechanic.",
+          "answer": "Resident Evil",
+          "category": "Video Games & Gaming History",
+          "verified": true
+        },
+        {
+          "value": 800,
+          "question": "Debuting in 1986 for the Famicom Disk System, this gothic horror series often involves the Belmont clan hunting vampires in a certain castle. It is a Konami franchise.",
+          "answer": "Castlevania",
+          "category": "Video Games & Gaming History",
+          "verified": true
+        },
+        {
+          "value": 1000,
+          "question": "In 1993, this man's studio released a side-scrolling platformer for the SNES that introduced a plumber with a mustache to a dinosaur companion named Yoshi, creating one of the most iconic video game duos of all time.",
+          "answer": "Shigeru Miyamoto",
+          "category": "Video Games & Gaming History",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "name": "Reel Facts",
+      "subject": "Movies & Film History",
+      "clues": [
+        {
+          "value": 200,
+          "question": "Judy Garland was just 16 when she starred in this 1939 fantasy film; its Technicolor beauty contrasted with the sepia-toned Kansas scenes, and a brainless scarecrow, a heartless tin man, and a cowardly lion joined her on the yellow brick road.",
+          "answer": "The Wizard of Oz",
+          "category": "Movies & Film History",
+          "verified": true
+        },
+        {
+          "value": 400,
+          "question": "Released in 1927, this German sci-fi film by Fritz Lang depicted a dystopian future with towering skyscrapers and a worker's revolt, and its pioneering set design influenced countless subsequent visions of urban futures in cinema.",
+          "answer": "Metropolis",
+          "category": "Movies & Film History",
+          "verified": true
+        },
+        {
+          "value": 600,
+          "question": "Released in 1960, this Stanley Kubrick epic was based on a 1959 novel about a Jewish prince who is betrayed and enslaved, then becomes a chariot racer seeking revenge in ancient Rome. Its climax features a brutal four-horse chariot race that defined the genre for decades.",
+          "answer": "Spartacus",
+          "category": "Movies & Film History",
+          "verified": true
+        },
+        {
+          "value": 800,
+          "question": "In 1941, this Orson Welles film debuted with a non-linear narrative and deep-focus cinematography, shocking audiences who had never seen a protagonist with such a complex childhood flashback and a single-word scream to open the story.",
+          "answer": "Citizen Kane",
+          "category": "Movies & Film History",
+          "verified": true
+        },
+        {
+          "value": 1000,
+          "question": "In 1994, this film's production company, Miramax, faced criticism for its aggressive Oscar campaign, which some said undermined the traditional awards process.",
+          "answer": "Pulp Fiction",
+          "category": "Movies & Film History",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "name": "Mutually Assured Enjoyment",
+      "subject": "Cold War History",
+      "clues": [
+        {
+          "value": 200,
+          "question": "Named for a river in Southeast Asia, this 1955 military alliance was created by the United States and eight other nations to contain communist expansion in the region, serving as the Eastern counterpart to the Soviet-led Warsaw Pact.",
+          "answer": "Southeast Asia Treaty Organization",
+          "category": "Cold War History",
+          "verified": true
+        },
+        {
+          "value": 400,
+          "question": "In 1961, this president authorized the ill-fated Bay of Pigs invasion, a failed CIA-led attempt to overthrow Fidel Castro's government that strengthened Castro's power and pushed Cuba closer to the Soviet Union.",
+          "answer": "John F. Kennedy",
+          "category": "Cold War History",
+          "verified": true
+        },
+        {
+          "value": 600,
+          "question": "In 1956, this event began when Soviet forces invaded Poland and Hungary after their governments attempted to leave the Soviet sphere of influence, leading to brutal crackdowns that lasted for weeks.",
+          "answer": "Hungarian Revolution",
+          "category": "Cold War History",
+          "verified": true
+        },
+        {
+          "value": 800,
+          "question": "In 1961, a U-2 spy plane shot down over Soviet airspace turned a scheduled Paris summit into a Cold War crisis, and the American pilot's capture provided the USSR with a propaganda windfall.",
+          "answer": "Francis Gary Powers",
+          "category": "Cold War History",
+          "verified": true
+        },
+        {
+          "value": 1000,
+          "question": "In 1961, this Soviet cosmonaut became the first human in space, orbiting the Earth once in his Vostok 1 capsule before safely re-entering and landing in a field where a farmer and his daughter found him.",
+          "answer": "Yuri Gagarin",
+          "category": "Cold War History",
+          "verified": true
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "value": 200,
+      "question": "Developed by a team in Zurich, this soft robot can mimic the movement of an octopus arm by using fluid-filled chambers to contract and twist, eliminating the need for rigid joints.",
+      "answer": "Octobot",
+      "category": "Robotics & AI",
+      "verified": true
+    },
+    {
+      "value": 400,
+      "question": "Developed by a Swiss team led by Roland Siegwart, this 2003 autonomous vehicle completed the DARPA Grand Challenge by finishing the 132-mile desert course after more than seven hours, making it the only robot to finish the entire race.",
+      "answer": "Stanley",
+      "category": "Robotics & AI",
+      "verified": true
+    },
+    {
+      "value": 600,
+      "question": "Pioneered by Rodney Brooks at MIT in the 1980s, this behavioral approach to AI focuses on building simple, reactive agents that interact with their environment in real-time, without using internal models or symbolic reasoning.",
+      "answer": "Subsumption architecture",
+      "category": "Robotics & AI",
+      "verified": true
+    },
+    {
+      "value": 800,
+      "question": "Developed by Google DeepMind in 2016, this neural network-based system defeated world champion Lee Sedol in the ancient board game of Go by using a combination of policy and value networks for move prediction and board evaluation.",
+      "answer": "AlphaGo",
+      "category": "Robotics & AI",
+      "verified": true
+    },
+    {
+      "value": 1000,
+      "question": "In 1997, this IBM supercomputer became the first machine to beat a reigning world chess champion under standard tournament conditions, defeating Garry Kasparov in a six-game match that was broadcast live on the internet.",
+      "answer": "Deep Blue",
+      "category": "Robotics & AI",
+      "verified": true
+    },
+    {
+      "value": 200,
+      "question": "Named for its location in Poland, this camp was the first of the Nazi concentration camps to be liberated by Allied forces in January 1945, revealing the full horror of the Holocaust to the world.",
+      "answer": "Auschwitz concentration camp",
+      "category": "WWII History",
+      "verified": true
+    },
+    {
+      "value": 400,
+      "question": "Beginning in 1940, a series of massive German bombing raids on British cities, named for the target that endured 57 consecutive nights of attack, tested civilian morale and the effectiveness of the Royal Air Force's defensive network.",
+      "answer": "The Blitz",
+      "category": "WWII History",
+      "verified": true
+    },
+    {
+      "value": 600,
+      "question": "In June 1944, this top-secret Allied deception plan for the Normandy landings included a phantom army commanded by General George S. Patton, complete with inflatable Sherman tanks and double agents feeding false information to the Germans.",
+      "answer": "Operation Fortitude",
+      "category": "WWII History",
+      "verified": true
+    },
+    {
+      "value": 800,
+      "question": "In May 1945, this fortified city on the Elbe River was the site of a dramatic meeting between American and Soviet forces, ending with the two armies literally shaking hands across a shattered bridge that had once symbolized German unity.",
+      "answer": "Torgau",
+      "category": "WWII History",
+      "verified": true
+    },
+    {
+      "value": 1000,
+      "question": "In 1942, Allied codebreakers at Bletchley Park broke the German naval Enigma code using this machine, which electromechanically simulated the rotor settings to find daily keys.",
+      "answer": "Bombe",
+      "category": "WWII History",
+      "verified": true
+    },
+    {
+      "value": 200,
+      "question": "This 1967 film, starring Dustin Hoffman and Anne Bancroft, won the Academy Award for Best Picture. Its title refers to a young man's romantic affair with an older woman, a term popularized by the film's marketing campaign.",
+      "answer": "The Graduate",
+      "category": "Before & After",
+      "verified": true
+    },
+    {
+      "value": 400,
+      "question": "Named after Max Kleiber, this biological law states metabolic rate scales to the \u00be power of mass, a cat using about 32 times more energy than a mouse 100 times smaller.",
+      "answer": "Kleiber's law",
+      "category": "Before & After",
+      "verified": true
+    },
+    {
+      "value": 600,
+      "question": "In this 1985 case, the Court established that a public school official needs only 'reasonable suspicion,' not a warrant, to search a student in a school environment.",
+      "answer": "New Jersey v. T. L. O.",
+      "category": "Before & After",
+      "verified": true
+    },
+    {
+      "value": 800,
+      "question": "Named for the ancient city that once served as the capital of the Achaemenid Empire, this modern Iranian province is home to the ruins of Persepolis, the ceremonial capital built by Darius the Great.",
+      "answer": "Fars province",
+      "category": "Before & After",
+      "verified": true
+    },
+    {
+      "value": 1000,
+      "question": "In the 1884 novel by Robert Louis Stevenson, a London lawyer named Gabriel John Utterson investigates the strange case of his friend Dr. Henry Jekyll, whose alter ego, a cruel and hedonistic figure, shares this book's one-word title.",
+      "answer": "Strange Case of Dr Jekyll and Mr Hyde",
+      "category": "Before & After",
+      "verified": true
+    },
+    {
+      "value": 200,
+      "question": "In 1981, a plumber named Mario first appeared not in his own game, but as 'Jumpman' in this arcade classic about a carpenter trying to rescue his girlfriend from a giant ape.",
+      "answer": "Donkey Kong",
+      "category": "Video Games & Gaming History",
+      "verified": true
+    },
+    {
+      "value": 400,
+      "question": "Developed by a small team at Rare and released for the Nintendo 64 in 1998, this platformer about a honey bear collecting musical notes is often cited as one of the greatest games of all time.",
+      "answer": "Banjo-Kazooie",
+      "category": "Video Games & Gaming History",
+      "verified": true
+    },
+    {
+      "value": 600,
+      "question": "Originally released in Japan in 1996 for the PlayStation, this survival horror game by Capcom introduced the world to the Spencer Mansion and the T-virus, pioneering the 'tank controls' mechanic.",
+      "answer": "Resident Evil",
+      "category": "Video Games & Gaming History",
+      "verified": true
+    },
+    {
+      "value": 800,
+      "question": "Debuting in 1986 for the Famicom Disk System, this gothic horror series often involves the Belmont clan hunting vampires in a certain castle. It is a Konami franchise.",
+      "answer": "Castlevania",
+      "category": "Video Games & Gaming History",
+      "verified": true
+    },
+    {
+      "value": 1000,
+      "question": "In 1993, this man's studio released a side-scrolling platformer for the SNES that introduced a plumber with a mustache to a dinosaur companion named Yoshi, creating one of the most iconic video game duos of all time.",
+      "answer": "Shigeru Miyamoto",
+      "category": "Video Games & Gaming History",
+      "verified": true
+    },
+    {
+      "value": 200,
+      "question": "Judy Garland was just 16 when she starred in this 1939 fantasy film; its Technicolor beauty contrasted with the sepia-toned Kansas scenes, and a brainless scarecrow, a heartless tin man, and a cowardly lion joined her on the yellow brick road.",
+      "answer": "The Wizard of Oz",
+      "category": "Movies & Film History",
+      "verified": true
+    },
+    {
+      "value": 400,
+      "question": "Released in 1927, this German sci-fi film by Fritz Lang depicted a dystopian future with towering skyscrapers and a worker's revolt, and its pioneering set design influenced countless subsequent visions of urban futures in cinema.",
+      "answer": "Metropolis",
+      "category": "Movies & Film History",
+      "verified": true
+    },
+    {
+      "value": 600,
+      "question": "Released in 1960, this Stanley Kubrick epic was based on a 1959 novel about a Jewish prince who is betrayed and enslaved, then becomes a chariot racer seeking revenge in ancient Rome. Its climax features a brutal four-horse chariot race that defined the genre for decades.",
+      "answer": "Spartacus",
+      "category": "Movies & Film History",
+      "verified": true
+    },
+    {
+      "value": 800,
+      "question": "In 1941, this Orson Welles film debuted with a non-linear narrative and deep-focus cinematography, shocking audiences who had never seen a protagonist with such a complex childhood flashback and a single-word scream to open the story.",
+      "answer": "Citizen Kane",
+      "category": "Movies & Film History",
+      "verified": true
+    },
+    {
+      "value": 1000,
+      "question": "In 1994, this film's production company, Miramax, faced criticism for its aggressive Oscar campaign, which some said undermined the traditional awards process.",
+      "answer": "Pulp Fiction",
+      "category": "Movies & Film History",
+      "verified": true
+    },
+    {
+      "value": 200,
+      "question": "Named for a river in Southeast Asia, this 1955 military alliance was created by the United States and eight other nations to contain communist expansion in the region, serving as the Eastern counterpart to the Soviet-led Warsaw Pact.",
+      "answer": "Southeast Asia Treaty Organization",
+      "category": "Cold War History",
+      "verified": true
+    },
+    {
+      "value": 400,
+      "question": "In 1961, this president authorized the ill-fated Bay of Pigs invasion, a failed CIA-led attempt to overthrow Fidel Castro's government that strengthened Castro's power and pushed Cuba closer to the Soviet Union.",
+      "answer": "John F. Kennedy",
+      "category": "Cold War History",
+      "verified": true
+    },
+    {
+      "value": 600,
+      "question": "In 1956, this event began when Soviet forces invaded Poland and Hungary after their governments attempted to leave the Soviet sphere of influence, leading to brutal crackdowns that lasted for weeks.",
+      "answer": "Hungarian Revolution",
+      "category": "Cold War History",
+      "verified": true
+    },
+    {
+      "value": 800,
+      "question": "In 1961, a U-2 spy plane shot down over Soviet airspace turned a scheduled Paris summit into a Cold War crisis, and the American pilot's capture provided the USSR with a propaganda windfall.",
+      "answer": "Francis Gary Powers",
+      "category": "Cold War History",
+      "verified": true
+    },
+    {
+      "value": 1000,
+      "question": "In 1961, this Soviet cosmonaut became the first human in space, orbiting the Earth once in his Vostok 1 capsule before safely re-entering and landing in a field where a farmer and his daughter found him.",
+      "answer": "Yuri Gagarin",
+      "category": "Cold War History",
+      "verified": true
+    }
+  ],
+  "verified": 30,
+  "unverified": 0
+}
