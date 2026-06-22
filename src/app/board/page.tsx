@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Loader2, Home, Trophy, X } from "lucide-react";
+import { Loader2, Home, Trophy, X, BookOpen } from "lucide-react";
 
 interface Clue {
   value: number;
@@ -38,6 +38,43 @@ export default function BoardPage() {
   const [showAnswer, setShowAnswer] = useState(false);
   const [grading, setGrading] = useState(false);
   const [gameId, setGameId] = useState<number | null>(null);
+  const [savedBoards, setSavedBoards] = useState<any[] | null>(null);
+  const [showSaved, setShowSaved] = useState(false);
+  const [loadingSaved, setLoadingSaved] = useState(false);
+
+  const loadSavedBoard = async (filename: string) => {
+    try {
+      const res = await fetch("/api/boards", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ filename }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to load");
+      setBoard(data.board);
+      setScore(0);
+      setTotal(0);
+      setSelectedClue(null);
+      setUserAnswer("");
+      setShowAnswer(false);
+      setShowSaved(false);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to load board");
+    }
+  };
+
+  const openSavedBoards = async () => {
+    setLoadingSaved(true);
+    setShowSaved(true);
+    try {
+      const res = await fetch("/api/boards");
+      const data = await res.json();
+      setSavedBoards(data.boards || []);
+    } catch {
+      setSavedBoards([]);
+    }
+    setLoadingSaved(false);
+  };
 
   const generate = useCallback(async () => {
     setLoading(true);
@@ -197,6 +234,9 @@ export default function BoardPage() {
           <button onClick={generate} className="px-4 py-2 bg-yellow-500 text-blue-950 rounded-lg font-semibold text-sm hover:bg-yellow-400">
             New Board
           </button>
+          <button onClick={openSavedBoards} className="px-4 py-2 bg-blue-800 text-blue-200 rounded-lg font-semibold text-sm hover:bg-blue-700 flex items-center gap-1.5">
+            <BookOpen size={16} /> Saved
+          </button>
         </div>
       </div>
 
@@ -325,6 +365,54 @@ export default function BoardPage() {
                 Home
               </a>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Saved Boards Modal */}
+      {showSaved && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4" onClick={() => setShowSaved(false)}>
+          <div className="bg-blue-900 rounded-xl max-w-2xl w-full p-6 shadow-2xl border border-blue-700 max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                <BookOpen size={20} className="text-yellow-400" /> Saved Boards
+              </h2>
+              <button onClick={() => setShowSaved(false)} className="text-blue-400 hover:text-blue-200">
+                <X size={24} />
+              </button>
+            </div>
+            {loadingSaved ? (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 size={24} className="animate-spin text-yellow-400" />
+              </div>
+            ) : savedBoards && savedBoards.length > 0 ? (
+              <div className="space-y-2">
+                {savedBoards.map((b: any) => (
+                  <button
+                    key={b.id}
+                    onClick={() => loadSavedBoard(b.filename)}
+                    className="w-full text-left p-3 rounded-lg bg-blue-800 hover:bg-blue-700 transition flex items-start justify-between gap-4"
+                  >
+                    <div className="min-w-0">
+                      <div className="text-white font-semibold text-sm truncate">
+                        {b.categories?.[0] || "Unknown"}
+                        {b.categories?.[1] ? `, ${b.categories[1]}` : ""}
+                        {b.categories?.[2] ? `, ${b.categories[2]}` : ""}
+                      </div>
+                      <div className="text-blue-400 text-xs mt-1">
+                        {b.categories?.join(" • ") || ""}
+                      </div>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <div className="text-yellow-400 text-sm">{b.verified}/{b.total}</div>
+                      <div className="text-blue-400 text-xs">{b.date}</div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <p className="text-blue-300 text-center py-8">No saved boards yet. Generate some boards first!</p>
+            )}
           </div>
         </div>
       )}
