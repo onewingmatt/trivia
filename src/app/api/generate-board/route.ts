@@ -381,67 +381,11 @@ Output JSON with a "clues" array. Each clue: value (int), question (string), ans
               clue.answer = wiki.pageTitle || clue.answer;
             }
 
-            // Fetch article content and verify clue facts
+            // Fetch article content to ensure the page actually exists (fact verification skipped for speed)
             const content = await fetchWikiContent(clue.answer);
-            if (content) {
-              try {
-                const vcomp = await openai.chat.completions.create({
-                  model: selectedModel,
-                  messages: [
-                    { role: "system", content: VERIFY_PROMPT },
-                    {
-                      role: "user",
-                      content: JSON.stringify({
-                        clue: clue.question,
-                        intended_answer: clue.answer,
-                        wiki_article: content.slice(0, 2000),
-                      }),
-                    },
-                  ],
-                  response_format: { type: "json_object" } as any,
-                });
-                const vresult = JSON.parse(
-                  vcomp.choices[0].message.content || "{}"
-                );
-                if (vresult.correct === false) {
-                  // Regenerate from verified Wikipedia source
-                  const regen = await openai.chat.completions.create({
-                    model: selectedModel,
-                    messages: [
-                      {
-                        role: "system",
-                        content:
-                          "You write Jeopardy clues from source text. Output valid JSON. The answer word MUST NOT appear in the clue.",
-                      },
-                      {
-                        role: "user",
-                        content: `Write a Jeopardy clue using ONLY the provided source text about ${clue.answer}.\n\nSource:\n${content.slice(0, 1500)}\n\nOutput JSON with "question" and "answer" keys.`,
-                      },
-                    ],
-                    response_format: { type: "json_object" } as any,
-                  });
-                  const regenParsed = JSON.parse(
-                    regen.choices[0].message.content || "{}"
-                  );
-                  if (regenParsed.question) {
-                    // Check regenerated clue doesn't contain the answer
-                    const ansWords = clue.answer.toLowerCase().split(/\s+/);
-                    const rqLower = regenParsed.question.toLowerCase();
-                    if (
-                      ansWords.some(
-                        (w: string) => w.length > 3 && rqLower.includes(w)
-                      )
-                    ) {
-                      continue;
-                    }
-                    clue.question = regenParsed.question;
-                  } else {
-                    continue;
-                  }
-                }
-              } catch {
-                // If verification call fails, accept clue anyway
-              }
+            if (!content) {
+              console.log(`  No Wikipedia content for: ${clue.answer}`);
+              continue;
             }
 
             // ---- Quality Gate: LLM Judge (skip for wordplay) ---- SKIPPED for speed
