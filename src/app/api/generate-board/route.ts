@@ -171,9 +171,9 @@ export async function POST(req: NextRequest) {
       let currentCategory = categories[catIdx];
       let clues: any[] = [];
       let attempts = 0;
-      const maxAttempts = 20;
+      const maxAttempts = 8;
       let catSwaps = 0;
-      const maxCatSwaps = 3;
+      const maxCatSwaps = 2;
       const triedSubjects = new Set<string>([currentCategory.toLowerCase()]);
 
       // ---- Main generation loop ----
@@ -492,7 +492,7 @@ Output JSON with a "clues" array. Each clue: value (int), question (string), ans
           `  Last-resort fill: have ${clues.length}/5, generating remaining with relaxed gates`
         );
         let rescueAttempts = 0;
-        const maxRescueAttempts = 15;
+        const maxRescueAttempts = 8;
         while (clues.length < 5 && rescueAttempts < maxRescueAttempts) {
           rescueAttempts++;
           try {
