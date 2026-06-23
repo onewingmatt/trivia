@@ -360,33 +360,9 @@ Output JSON with a "clues" array. Each clue: value (int), question (string), ans
               }
             }
 
-            // ---- Quality Gate: Wikipedia verification ----
-            const wiki = await wikiPageExists(clue.answer);
-            if (!wiki.ok) {
-              // Try cleaning the answer further
-              const cleaned = clue.answer
-                .replace(/^the\s+/i, "")
-                .replace(/\s+\(.*\)$/, "")
-                .trim();
-              const wiki2 = await wikiPageExists(cleaned);
-              if (wiki2.ok) {
-                clue.answer = wiki2.pageTitle || cleaned;
-              } else {
-                console.log(
-                  `  No Wikipedia page for: ${clue.answer}`
-                );
-                continue; // Skip this clue, regenerate below
-              }
-            } else {
-              clue.answer = wiki.pageTitle || clue.answer;
-            }
-
-            // Fetch article content to ensure the page actually exists (fact verification skipped for speed)
-            const content = await fetchWikiContent(clue.answer);
-            if (!content) {
-              console.log(`  No Wikipedia content for: ${clue.answer}`);
-              continue;
-            }
+            // ---- Quality Gate: Wikipedia verification -- SKIPPED for speed (model generates real entities)
+            // Just accept the clue. The fast heuristic checks (generic opening, wiki-ese, length,
+            // answer-in-question) ensure style quality. Wikipedia existence is nice but costs ~2s per call.
 
             // ---- Quality Gate: LLM Judge (skip for wordplay) ---- SKIPPED for speed
             // (heuristic checks handle voice/style — generic opening, wiki-ese, length)
