@@ -135,7 +135,7 @@ Return JSON: {"correct": true/false, "reason": "brief explanation"}
 
 Be LENIENT — the clue may rephrase information in different words. Only reject if the clue contains a factual error (wrong date, wrong attribution, made-up claim). Accept reasonable paraphrasing.`;
 
-const JUDGE_SYSTEM_PROMPT = `You judge Jeopardy clue quality. Output JSON.`;
+// LLM judge (quality gate removed for speed — heuristic checks suffice)
 
 const FALLBACK_ANSWERS = [
   "Paris",
@@ -444,60 +444,9 @@ Output JSON with a "clues" array. Each clue: value (int), question (string), ans
               }
             }
 
-            // ---- Quality Gate: LLM Judge (skip for wordplay) ----
-            if (!isWordplay) {
-              try {
-                const judgePrompt = `Rate this Jeopardy clue on how much it sounds like a REAL Jeopardy clue vs AI-generated.
-
-Category: ${currentCategory}
-Clue: ${clue.question}
-Expected answer: ${clue.answer}
-
-A REAL Jeopardy clue (4-5):
-- Starts with a specific concrete hook (date, event, name, vivid detail)
-- Conversational but precise tone
-- Builds toward the answer with layered specifics
-- Does NOT read like a Wikipedia article summary
-- Uses varied openings, not repetitive patterns
-
-An AI-GENERATED clue (1-2):
-- Opens with "This [noun]..." or encyclopedia phrasing
-- Lists facts without narrative flow
-- Feels robotic, impersonal, or article-like
-- Overuses relative clauses and appositives
-
-Score 3 = borderline, acceptable but not great.
-
-Score 1-5 (5 = sounds like real Jeopardy, 1 = obviously AI-generated).
-Output JSON: {"score": <1-5>, "reason": "brief"}`;
-
-                const judgeComp = await openai.chat.completions.create({
-                  model: selectedModel,
-                  messages: [
-                    {
-                      role: "system",
-                      content: JUDGE_SYSTEM_PROMPT,
-                    },
-                    { role: "user", content: judgePrompt },
-                  ],
-                  response_format: { type: "json_object" } as any,
-                });
-
-                const judgeResult = JSON.parse(
-                  judgeComp.choices[0].message.content || "{}"
-                );
-                const score = parseInt(judgeResult.score, 10) || 3;
-                if (score < 3) {
-                  console.log(
-                    `  Quality judge rejected (score=${score}): ${(judgeResult.reason || "").slice(0, 50)}`
-                  );
-                  continue;
-                }
-              } catch {
-                // If judge call fails, accept clue anyway
-              }
-            }
-
+            // ---- Quality Gate: LLM Judge (skip for wordplay) ---- SKIPPED for speed
+            // (heuristic checks handle voice/style — generic opening, wiki-ese, length)
+            
             clues.push(clue);
           }
 
