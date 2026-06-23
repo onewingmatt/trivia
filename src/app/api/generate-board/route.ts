@@ -167,8 +167,8 @@ export async function POST(req: NextRequest) {
     const values = [200, 400, 600, 800, 1000];
     const board: { name: string; clues: any[] }[] = [];
 
-    for (let catIdx = 0; catIdx < categories.length; catIdx++) {
-      let currentCategory = categories[catIdx];
+    const generateCategory = async (initialCategory: string, catIdx: number): Promise<{ name: string; clues: any[] }> => {
+      let currentCategory = initialCategory;
       let clues: any[] = [];
       let attempts = 0;
       const maxAttempts = 8;
@@ -499,7 +499,12 @@ Output JSON with a "clues" array. Each clue: value (int), question (string), ans
       }
       clues = clues.slice(0, 5);
 
-      board.push({ name: currentCategory, clues });
+      return { name: currentCategory, clues };
+    };
+
+    const categoryResults = await Promise.all(categories.map((c, i) => generateCategory(c, i)));
+    for (const result of categoryResults) {
+      board.push(result);
     }
 
     // Save game in DB
