@@ -660,6 +660,25 @@ Output JSON: {"score": <1-5>, "reason": "brief"}`;
       gameId = Number(result.lastInsertRowid);
     }
 
+    // Auto-save to boards archive
+    try {
+      const fs = require("fs") as typeof import("fs");
+      const path = require("path") as typeof import("path");
+      const boardDir = path.join(process.cwd(), "src", "data", "boards");
+      fs.mkdirSync(boardDir, { recursive: true });
+      const catName = board[0]?.name?.replace(/[^a-zA-Z0-9-]/g, "").slice(0, 25) || "board";
+      const ts = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
+      const boardData = {
+        categories: board,
+        questions: board.flatMap((c: any) => c.clues),
+        verified: board.reduce((s: number, c: any) => s + c.clues.filter((cl: any) => cl.answer && cl.answer !== "?").length, 0),
+        unverified: 0,
+      };
+      fs.writeFileSync(path.join(boardDir, `${ts}_${catName}.json`), JSON.stringify(boardData, null, 2));
+    } catch (e) {
+      console.error("Board archive save failed:", e);
+    }
+
     return NextResponse.json({ board, gameId });
   } catch (error: unknown) {
     console.error("Board generate error:", error);

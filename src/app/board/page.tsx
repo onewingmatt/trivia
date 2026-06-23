@@ -111,6 +111,53 @@ export default function BoardPage() {
     }
   }, []);
 
+  const generateLive = async () => {
+    setLoading(true);
+    setError(null);
+    setLoadingTime(0);
+    const startTime = Date.now();
+    const timer = setInterval(() => setLoadingTime(Math.floor((Date.now() - startTime) / 1000)), 1000);
+    const config = getConfig();
+    if (!config.apiKey) {
+      setError("Set up your API key in Settings first.");
+      clearInterval(timer);
+      setLoading(false);
+      return;
+    }
+    try {
+      const res = await fetch("/api/generate-board", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          apiKey: config.apiKey,
+          baseURL: config.baseURL,
+          model: config.model,
+          promptStyle: config.promptStyle || "standard",
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to generate");
+      setBoard(data.board);
+      setGameId(data.gameId || null);
+      setScore(0);
+      setTotal(0);
+      setSelectedClue(null);
+      setUserAnswer("");
+      setShowAnswer(false);
+      // Refresh saved boards list
+      try {
+        const br = await fetch("/api/boards");
+        const bd = await br.json();
+        setSavedBoards(bd.boards || []);
+      } catch {}
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to generate board");
+    } finally {
+      clearInterval(timer);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     generate();
   }, [generate]);
@@ -233,6 +280,9 @@ export default function BoardPage() {
           <div className="text-blue-300 text-sm">{playedClues}/{totalClues} played</div>
           <button onClick={generate} className="px-4 py-2 bg-yellow-500 text-blue-950 rounded-lg font-semibold text-sm hover:bg-yellow-400">
             New Board
+          </button>
+          <button onClick={generateLive} className="px-4 py-2 bg-green-600 text-white rounded-lg font-semibold text-sm hover:bg-green-500 flex items-center gap-1.5">
+            + Generate
           </button>
           <button onClick={openSavedBoards} className="px-4 py-2 bg-blue-800 text-blue-200 rounded-lg font-semibold text-sm hover:bg-blue-700 flex items-center gap-1.5">
             <BookOpen size={16} /> Saved
